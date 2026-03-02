@@ -60,15 +60,21 @@ Component({
      */
     reloadTodos() {
       const todos = repository.list()
-      const total = todos ? todos.length : 0
-      const completed = todos ? todos.filter((t) => t.completed).length : 0
+
+      // 确保 todos 是一个有效的数组
+      const validTodos = Array.isArray(todos) ? todos : []
+
+      // 计算统计数据，过滤掉可能的无效项
+      const total = validTodos.length
+      const completed = validTodos.filter((t) => t && typeof t.completed === 'boolean' && t.completed).length
+      const active = total - completed
 
       this.setData({
-        todos: todos || [],
+        todos: validTodos,
         stats: {
           total,
           completed,
-          active: total - completed,
+          active,
         },
       })
     },
