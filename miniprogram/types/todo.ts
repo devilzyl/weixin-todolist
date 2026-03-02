@@ -56,4 +56,24 @@ export interface TodoRepository {
    * @returns 是否成功删除
    */
   remove(id: string): boolean
+
+  /**
+   * 更新任务标题
+   * @param input - 包含任务 ID 和新标题的输入对象
+   * @returns 更新后的任务，不存在时返回 null
+   */
+  updateTitle(input: { id: string; title: string }): TodoItem | null
+
+  /**
+   * 批量设置所有任务的完成状态
+   * @param input - 包含完成状态的输入对象
+   * @returns 受影响的任务数量
+   */
+  markAll(input: { completed: boolean }): number
+
+  /**
+   * 清除所有已完成的任务
+   * @returns 删除的任务数量
+   */
+  clearCompleted(): number
 }
