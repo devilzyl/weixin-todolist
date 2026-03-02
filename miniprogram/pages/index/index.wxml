@@ -1,0 +1,96 @@
+<!-- TodoList 列表页 -->
+<view class="container">
+  <!-- 统计卡片 -->
+  <view class="stats-container">
+    <view class="stat-card primary">
+      <view class="stat-icon">
+        <text class="icon">📋</text>
+      </view>
+      <view class="stat-content">
+        <text class="stat-value">{{stats.total}}</text>
+        <text class="stat-label">全部任务</text>
+      </view>
+    </view>
+
+    <view class="stat-card success">
+      <view class="stat-icon">
+        <text class="icon">✅</text>
+      </view>
+      <view class="stat-content">
+        <text class="stat-value">{{stats.completed}}</text>
+        <text class="stat-label">已完成</text>
+      </view>
+    </view>
+
+    <view class="stat-card warning">
+      <view class="stat-icon">
+        <text class="icon">⏳</text>
+      </view>
+      <view class="stat-content">
+        <text class="stat-value">{{stats.active}}</text>
+        <text class="stat-label">待完成</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 任务列表 -->
+  <view class="todo-list">
+    <!-- 空态 -->
+    <view wx:if="{{todos.length === 0}}" class="empty-state">
+      <view class="empty-illustration">
+        <view class="illustration-circle"></view>
+        <view class="illustration-icon">📝</view>
+      </view>
+      <text class="empty-title">还没有任务</text>
+      <text class="empty-desc">点击右下角按钮创建第一个任务吧</text>
+      <view class="empty-action" bindtap="navigateToCreate">
+        <text class="action-text">立即创建</text>
+      </view>
+    </view>
+
+    <!-- 任务项 -->
+    <view
+      wx:for="{{todos}}"
+      wx:key="id"
+      class="todo-item {{item.completed ? 'completed' : ''}}"
+      data-id="{{item.id}}"
+      style="animation: slideIn 0.3s ease-out {{index * 0.05}}s backwards;"
+    >
+      <view class="todo-left" bindtap="handleToggle">
+        <!-- 自定义复选框 -->
+        <view class="custom-checkbox {{item.completed ? 'checked' : ''}}">
+          <view class="checkbox-inner" wx:if="{{item.completed}}">
+            <text class="check-icon">✓</text>
+          </view>
+        </view>
+
+        <!-- 任务内容 -->
+        <view class="todo-content">
+          <text class="todo-title">{{item.title}}</text>
+        </view>
+      </view>
+
+      <!-- 删除按钮 -->
+      <view
+        class="delete-btn"
+        data-id="{{item.id}}"
+        catchtap="handleDelete"
+        hover-class="delete-btn-hover"
+      >
+        <text class="delete-icon">🗑️</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 浮动新增按钮 -->
+  <view
+    class="fab-button"
+    bindtap="navigateToCreate"
+    hover-class="fab-hover"
+  >
+    <view class="fab-icon">
+      <text class="plus-icon">+</text>
+    </view>
+    <view class="fab-text">新增</view>
+  </view>
+</view>

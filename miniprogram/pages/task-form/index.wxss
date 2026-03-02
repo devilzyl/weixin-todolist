@@ -1,0 +1,102 @@
+/**
+ * 新增任务页面样式
+ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f9fafb;
+  padding: 24rpx;
+}
+
+/* 表单区域 */
+.form {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  font-size: 28rpx;
+  color: #1f2937;
+  margin-bottom: 16rpx;
+  font-weight: 600;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 200rpx;
+  padding: 16rpx;
+  border: 2rpx solid #e5e7eb;
+  border-radius: 12rpx;
+  font-size: 30rpx;
+  box-sizing: border-box;
+  background-color: #f9fafb;
+  transition: all 0.3s ease;
+}
+
+.textarea:focus {
+  border-color: #667eea;
+  background-color: #fff;
+}
+
+.counter {
+  align-self: flex-end;
+  font-size: 24rpx;
+  color: #9ca3af;
+  margin-top: 8rpx;
+}
+
+/* 操作按钮区域 */
+.actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: auto;
+}
+
+.cancel-button,
+.save-button {
+  flex: 1;
+  padding: 24rpx;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+}
+
+.cancel-button {
+  background-color: #fff;
+  color: #6b7280;
+  border: 2rpx solid #e5e7eb;
+}
+
+.cancel-button:active {
+  transform: scale(0.98);
+  background-color: #f9fafb;
+}
+
+.save-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+}
+
+.save-button:active {
+  transform: scale(0.98);
+  box-shadow: 0 1rpx 4rpx rgba(102, 126, 234, 0.3);
+}
+
+.save-button.disabled {
+  background: #d1d5db;
+  color: #9ca3af;
+  box-shadow: none;
+}

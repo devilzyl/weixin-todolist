@@ -1,0 +1,120 @@
+/**
+ * 设计系统变量
+ * 定义全局的设计 tokens
+ */
+
+/* ==================== 颜色系统 ==================== */
+
+/* 主题色 - 渐变紫蓝 */
+--primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+--primary-color: #667eea;
+--primary-light: #8b9fee;
+--primary-dark: #4c63d2;
+--primary-alpha: rgba(102, 126, 234, 0.1);
+
+/* 功能色 */
+--success-color: #10b981;
+--success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+--danger-color: #ef4444;
+--danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+--warning-color: #f59e0b;
+--warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+--info-color: #3b82f6;
+
+/* 文字色 */
+--text-primary: #1f2937;
+--text-secondary: #6b7280;
+--text-tertiary: #9ca3af;
+--text-disabled: #d1d5db;
+--text-inverse: #ffffff;
+
+/* 背景色 */
+--bg-primary: #f9fafb;
+--bg-secondary: #ffffff;
+--bg-tertiary: #f3f4f6;
+--bg-overlay: rgba(0, 0, 0, 0.5);
+
+/* 边框色 */
+--border-light: #e5e7eb;
+--border-medium: #d1d5db;
+--border-dark: #9ca3af;
+
+/* ==================== 字体系统 ==================== */
+
+/* 字体大小 */
+--font-size-xs: 22rpx;
+--font-size-sm: 26rpx;
+--font-size-base: 30rpx;
+--font-size-lg: 34rpx;
+--font-size-xl: 40rpx;
+--font-size-2xl: 48rpx;
+
+/* 字体粗细 */
+--font-weight-normal: 400;
+--font-weight-medium: 500;
+--font-weight-semibold: 600;
+--font-weight-bold: 700;
+
+/* 行高 */
+--line-height-tight: 1.2;
+--line-height-normal: 1.5;
+--line-height-relaxed: 1.8;
+
+/* ==================== 间距系统 ==================== */
+
+--spacing-xs: 8rpx;
+--spacing-sm: 16rpx;
+--spacing-md: 24rpx;
+--spacing-lg: 32rpx;
+--spacing-xl: 48rpx;
+--spacing-2xl: 64rpx;
+--spacing-3xl: 96rpx;
+
+/* ==================== 圆角系统 ==================== */
+
+--radius-xs: 4rpx;
+--radius-sm: 8rpx;
+--radius-md: 12rpx;
+--radius-lg: 16rpx;
+--radius-xl: 24rpx;
+--radius-2xl: 32rpx;
+--radius-full: 9999rpx;
+
+/* ==================== 阴影系统 ==================== */
+
+--shadow-xs: 0 1rpx 2rpx rgba(0, 0, 0, 0.05);
+--shadow-sm: 0 2rpx 4rpx rgba(0, 0, 0, 0.06);
+--shadow-md: 0 4rpx 6rpx rgba(0, 0, 0, 0.07);
+--shadow-lg: 0 10rpx 15rpx rgba(0, 0, 0, 0.1);
+--shadow-xl: 0 20rpx 25rpx rgba(0, 0, 0, 0.15);
+--shadow-2xl: 0 25rpx 50rpx rgba(0, 0, 0, 0.25);
+
+/* 彩色阴影 */
+--shadow-primary: 0 8rpx 24rpx rgba(102, 126, 234, 0.25);
+--shadow-success: 0 8rpx 24rpx rgba(16, 185, 129, 0.25);
+--shadow-danger: 0 8rpx 24rpx rgba(239, 68, 68, 0.25);
+--shadow-warning: 0 8rpx 24rpx rgba(245, 158, 11, 0.25);
+
+/* ==================== 动画系统 ==================== */
+
+--duration-fast: 150ms;
+--duration-base: 300ms;
+--duration-slow: 500ms;
+
+--easing-linear: linear;
+--easing-ease: ease;
+--easing-ease-in: ease-in;
+--easing-ease-out: ease-out;
+--easing-ease-in-out: ease-in-out;
+--easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+/* ==================== Z-index 层级 ==================== */
+
+--z-base: 1;
+--z-dropdown: 10;
+--z-sticky: 50;
+--z-fixed: 100;
+--z-modal-backdrop: 500;
+--z-modal: 600;
+--z-popover: 700;
+--z-tooltip: 800;
