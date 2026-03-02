@@ -27,11 +27,11 @@ Component({
   },
 
   /** 页面生命周期 */
-  lifetimes: {
+  pageLifetimes: {
     /**
-     * 组件挂载时读取参数
+     * 页面显示时读取参数
      */
-    attached() {
+    show() {
       // 从页面参数中获取任务 ID 和标题
       const pages = getCurrentPages()
       const currentPage = pages[pages.length - 1] as any
@@ -51,11 +51,14 @@ Component({
         return
       }
 
+      // 解码标题（URL 编码）
+      const decodedTitle = title ? decodeURIComponent(title) : ''
+
       // 设置初始数据
       this.setData({
         id,
-        title: title || '',
-        titleLength: (title || '').length,
+        title: decodedTitle,
+        titleLength: decodedTitle.length,
       })
     },
   },
