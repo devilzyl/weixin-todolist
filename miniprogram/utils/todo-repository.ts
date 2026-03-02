@@ -98,6 +98,87 @@ export class LocalTodoRepository implements TodoRepository {
   }
 
   /**
+   * 更新任务标题
+   * @param input - 包含任务 ID 和新标题的输入对象
+   * @returns 更新后的任务，不存在时返回 null
+   */
+  updateTitle(input: { id: string; title: string }): TodoItem | null {
+    const todos = this.list()
+    const todo = todos.find((t) => t.id === input.id)
+
+    if (!todo) {
+      return null
+    }
+
+    // 创建新数组避免直接修改 list() 返回的引用
+    const newTodos = todos.map((t) => {
+      if (t.id === input.id) {
+        return {
+          ...t,
+          title: input.title,
+          updatedAt: Date.now(),
+        }
+      }
+      return t
+    })
+
+    this._saveToStorage(newTodos)
+
+    return newTodos.find((t) => t.id === input.id)!
+  }
+
+  /**
+   * 批量设置所有任务的完成状态
+   * @param input - 包含完成状态的输入对象
+   * @returns 受影响的任务数量
+   */
+  markAll(input: { completed: boolean }): number {
+    const todos = this.list()
+    const now = Date.now()
+
+    // 统计状态会发生变化的任务数量
+    const affectedCount = todos.filter((t) => t.completed !== input.completed).length
+
+    // 如果没有需要更新的任务，直接返回
+    if (affectedCount === 0) {
+      return 0
+    }
+
+    // 创建新数组，批量更新状态
+    const newTodos = todos.map((t) => ({
+      ...t,
+      completed: input.completed,
+      updatedAt: now,
+    }))
+
+    this._saveToStorage(newTodos)
+
+    return affectedCount
+  }
+
+  /**
+   * 清除所有已完成的任务
+   * @returns 删除的任务数量
+   */
+  clearCompleted(): number {
+    const todos = this.list()
+    const originalLength = todos.length
+
+    // 过滤掉已完成的任务
+    const activeTodos = todos.filter((t) => !t.completed)
+    const deletedCount = originalLength - activeTodos.length
+
+    // 如果没有已完成的任务，直接返回
+    if (deletedCount === 0) {
+      return 0
+    }
+
+    this._saveToStorage(activeTodos)
+
+    return deletedCount
+  }
+
+  /**
    * 从本地存储加载数据
    * @returns 原始数据或 null
    * @private
