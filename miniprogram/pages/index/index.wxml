@@ -33,6 +33,34 @@
     </view>
   </view>
 
+  <!-- 批量操作栏 -->
+  <view class="batch-actions" wx:if="{{todos.length > 0}}">
+    <button
+      class="batch-btn complete-all"
+      bindtap="handleMarkAllCompleted"
+      disabled="{{isBusy}}"
+    >
+      <text class="btn-icon">✅</text>
+      <text class="btn-text">全部完成</text>
+    </button>
+    <button
+      class="batch-btn uncomplete-all"
+      bindtap="handleMarkAllActive"
+      disabled="{{isBusy}}"
+    >
+      <text class="btn-icon">↩️</text>
+      <text class="btn-text">全部取消</text>
+    </button>
+    <button
+      class="batch-btn clear-completed"
+      bindtap="handleClearCompleted"
+      disabled="{{isBusy || stats.completed === 0}}"
+    >
+      <text class="btn-icon">🗑️</text>
+      <text class="btn-text">清除已完成</text>
+    </button>
+  </view>
+
   <!-- 任务列表 -->
   <view class="todo-list">
     <!-- 空态 -->

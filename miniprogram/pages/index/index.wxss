@@ -79,6 +79,72 @@ page {
   opacity: 0.9;
 }
 
+/* 批量操作栏 */
+.batch-actions {
+  display: flex;
+  gap: 12rpx;
+  padding: 0 24rpx 16rpx;
+}
+
+.batch-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16rpx 12rpx;
+  border-radius: 12rpx;
+  background: #fff;
+  border: 2rpx solid #e5e7eb;
+  font-size: 24rpx;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.batch-btn::after {
+  border: none;
+}
+
+.batch-btn:active {
+  transform: scale(0.96);
+}
+
+.batch-btn[disabled] {
+  opacity: 0.5;
+  background: #f9fafb;
+}
+
+.batch-btn .btn-icon {
+  font-size: 32rpx;
+  margin-bottom: 4rpx;
+}
+
+.batch-btn .btn-text {
+  font-size: 22rpx;
+  color: #6b7280;
+}
+
+.batch-btn.complete-all {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border-color: #10b981;
+}
+
+.batch-btn.uncomplete-all {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  border-color: #3b82f6;
+}
+
+.batch-btn.clear-completed {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-color: #ef4444;
+}
+
+.batch-btn.clear-completed[disabled] {
+  border-color: #e5e7eb;
+  opacity: 0.4;
+}
+
 /* 任务列表 */
 .todo-list {
   flex: 1;
