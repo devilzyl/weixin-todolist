@@ -60,8 +60,8 @@ Component({
      */
     reloadTodos() {
       const todos = repository.list()
-      const total = todos?.length || 0
-      const completed = todos?.filter((t) => t.completed).length || 0
+      const total = todos ? todos.length : 0
+      const completed = todos ? todos.filter((t) => t.completed).length : 0
 
       this.setData({
         todos: todos || [],
