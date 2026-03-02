@@ -53,10 +53,8 @@
       wx:for="{{todos}}"
       wx:key="id"
       class="todo-item {{item.completed ? 'completed' : ''}}"
-      data-id="{{item.id}}"
-      style="animation: slideIn 0.3s ease-out {{index * 0.05}}s backwards;"
     >
-      <view class="todo-left" bindtap="handleToggle">
+      <view class="todo-left" bindtap="handleToggle" data-id="{{item.id}}">
         <!-- 自定义复选框 -->
         <view class="custom-checkbox {{item.completed ? 'checked' : ''}}">
           <view class="checkbox-inner" wx:if="{{item.completed}}">
