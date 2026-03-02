@@ -26,3 +26,10 @@ Thumbs.db
 # 构建产物（如果有）
 dist/
 build/
+
+# 项目文档（plan 和 AI 相关）
+plan.md
+UI-REFACTOR-SUMMARY.md
+TESTING.md
+*-plan.md
+*-SUMMARY.md
