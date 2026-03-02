@@ -87,6 +87,26 @@ Component({
     },
 
     /**
+     * 跳转到任务编辑页面
+     * @param e - 事件对象
+     */
+    navigateToEdit(e: any) {
+      if (this.data.isBusy) {
+        return
+      }
+
+      const { id, title } = e.currentTarget.dataset
+
+      if (!id) {
+        return
+      }
+
+      wx.navigateTo({
+        url: `/pages/task-edit/index?id=${id}&title=${encodeURIComponent(title)}`,
+      })
+    },
+
+    /**
      * 切换任务完成状态
      * @param e - 事件对象
      */

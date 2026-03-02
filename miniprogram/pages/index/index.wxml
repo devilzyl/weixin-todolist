@@ -68,14 +68,28 @@
         </view>
       </view>
 
-      <!-- 删除按钮 -->
-      <view
-        class="delete-btn"
-        data-id="{{item.id}}"
-        catchtap="handleDelete"
-        hover-class="delete-btn-hover"
-      >
-        <text class="delete-icon">🗑️</text>
+      <!-- 操作按钮组 -->
+      <view class="action-buttons">
+        <!-- 编辑按钮 -->
+        <view
+          class="edit-btn"
+          data-id="{{item.id}}"
+          data-title="{{item.title}}"
+          catchtap="navigateToEdit"
+          hover-class="edit-btn-hover"
+        >
+          <text class="edit-icon">✏️</text>
+        </view>
+
+        <!-- 删除按钮 -->
+        <view
+          class="delete-btn"
+          data-id="{{item.id}}"
+          catchtap="handleDelete"
+          hover-class="delete-btn-hover"
+        >
+          <text class="delete-icon">🗑️</text>
+        </view>
       </view>
     </view>
   </view>
