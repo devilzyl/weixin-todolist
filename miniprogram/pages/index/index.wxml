@@ -33,6 +33,42 @@
     </view>
   </view>
 
+  <!-- 快速创建区 -->
+  <view class="quick-create">
+    <view class="quick-input-wrapper">
+      <input
+        class="quick-input"
+        type="text"
+        placeholder="输入新任务..."
+        value="{{quickTitle}}"
+        bindinput="handleQuickInput"
+        confirm-type="done"
+        disabled="{{isCreating || isBatchOperating}}"
+        maxlength="100"
+        aria-label="新任务标题输入框"
+      />
+      <text class="quick-counter">{{quickTitle.length}}/100</text>
+    </view>
+    <view class="quick-actions">
+      <button
+        class="quick-btn primary"
+        bindtap="handleQuickAddAndContinue"
+        disabled="{{isCreating || isBatchOperating}}"
+        aria-label="添加并继续输入"
+      >
+        添加并继续
+      </button>
+      <button
+        class="quick-btn secondary"
+        bindtap="handleQuickAddAndBlur"
+        disabled="{{isCreating || isBatchOperating}}"
+        aria-label="添加并关闭键盘"
+      >
+        添加并完成
+      </button>
+    </view>
+  </view>
+
   <!-- 批量操作栏 -->
   <view class="batch-actions" wx:if="{{todos.length > 0}}">
     <button
