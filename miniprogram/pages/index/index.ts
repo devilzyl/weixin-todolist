@@ -101,8 +101,11 @@ Component({
         return
       }
 
+      // 确保 title 不为 undefined，避免 encodeURIComponent 报错
+      const titleParam = title ? encodeURIComponent(title) : ''
+
       wx.navigateTo({
-        url: `/pages/task-edit/index?id=${id}&title=${encodeURIComponent(title)}`,
+        url: `/pages/task-edit/index?id=${id}&title=${titleParam}`,
       })
     },
 
