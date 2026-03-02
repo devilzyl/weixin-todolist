@@ -29,6 +29,9 @@ Component({
 
     /** 操作锁（防止快速连点） */
     isBusy: false,
+
+    /** 导航中状态（用于按钮反馈） */
+    isNavigating: false,
   },
 
   /** 组件生命周期 */
@@ -48,6 +51,11 @@ Component({
      * 从新增页返回时会触发
      */
     show() {
+      // 重置导航状态
+      this.setData({
+        isNavigating: false,
+      })
+      // 刷新任务列表
       this.reloadTodos()
     },
   },
@@ -81,8 +89,19 @@ Component({
         return
       }
 
+      // 立即显示导航状态，提供即时反馈
+      this.setData({
+        isNavigating: true,
+      })
+
       wx.navigateTo({
         url: '/pages/task-form/index',
+        fail: () => {
+          // 导航失败时重置状态
+          this.setData({
+            isNavigating: false,
+          })
+        },
       })
     },
 

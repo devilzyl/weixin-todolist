@@ -275,13 +275,18 @@ page {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 50rpx;
   box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.4);
-  transition: all 0.3s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
   z-index: 100;
 }
 
 .fab-button:active {
   transform: scale(0.95);
   box-shadow: 0 4rpx 12rpx rgba(102, 126, 234, 0.3);
+}
+
+.fab-button.fab-navigating {
+  opacity: 0.7;
+  transform: scale(0.95);
 }
 
 .fab-icon {
@@ -292,6 +297,11 @@ page {
   justify-content: center;
   background: rgba(255, 255, 255, 0.2);
   border-radius: 50%;
+  transition: transform 0.15s ease;
+}
+
+.fab-button.fab-navigating .fab-icon {
+  animation: rotate 1s linear infinite;
 }
 
 .plus-icon {
@@ -309,4 +319,14 @@ page {
 
 .fab-hover {
   box-shadow: 0 12rpx 32rpx rgba(102, 126, 234, 0.5);
+}
+
+/* 旋转动画（用于导航中的加载状态） */
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

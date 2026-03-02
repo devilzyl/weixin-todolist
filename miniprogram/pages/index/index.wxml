@@ -82,12 +82,14 @@
 
   <!-- 浮动新增按钮 -->
   <view
-    class="fab-button"
+    class="fab-button {{isNavigating ? 'fab-navigating' : ''}}"
     bindtap="navigateToCreate"
     hover-class="fab-hover"
+    hover-start-time="50"
+    hover-stay-time="100"
   >
     <view class="fab-icon">
-      <text class="plus-icon">+</text>
+      <text class="plus-icon">{{isNavigating ? '...' : '+'}}</text>
     </view>
     <view class="fab-text">新增</view>
   </view>
