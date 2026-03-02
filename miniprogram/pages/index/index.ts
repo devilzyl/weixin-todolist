@@ -60,11 +60,11 @@ Component({
      */
     reloadTodos() {
       const todos = repository.list()
-      const total = todos.length
-      const completed = todos.filter((t) => t.completed).length
+      const total = todos?.length || 0
+      const completed = todos?.filter((t) => t.completed).length || 0
 
       this.setData({
-        todos,
+        todos: todos || [],
         stats: {
           total,
           completed,
@@ -91,21 +91,15 @@ Component({
      * @param e - 事件对象
      */
     handleToggle(e: any) {
-      console.log('handleToggle 被调用', e.currentTarget.dataset)
-
       // 操作锁检查
       if (this.data.isBusy) {
-        console.log('操作锁阻止')
         return
       }
 
       const { id } = e.currentTarget.dataset
       if (!id) {
-        console.log('没有获取到 id')
         return
       }
-
-      console.log('切换任务:', id)
 
       // 设置操作锁
       this.setData({
@@ -120,8 +114,6 @@ Component({
           icon: 'none',
         })
       }
-
-      console.log('切换结果:', result)
 
       // 刷新列表
       this.reloadTodos()

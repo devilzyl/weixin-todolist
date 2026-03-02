@@ -57,8 +57,8 @@
       <view class="todo-left" bindtap="handleToggle" data-id="{{item.id}}">
         <!-- 自定义复选框 -->
         <view class="custom-checkbox {{item.completed ? 'checked' : ''}}">
-          <view class="checkbox-inner" wx:if="{{item.completed}}">
-            <text class="check-icon">✓</text>
+          <view class="checkbox-inner">
+            <text class="check-icon" wx:if="{{item.completed}}">✓</text>
           </view>
         </view>
 

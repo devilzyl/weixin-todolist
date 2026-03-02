@@ -60,12 +60,21 @@ export class LocalTodoRepository implements TodoRepository {
       return null
     }
 
-    todo.completed = !todo.completed
-    todo.updatedAt = Date.now()
+    // 创建新数组避免直接修改 list() 返回的引用
+    const newTodos = todos.map((t) => {
+      if (t.id === id) {
+        return {
+          ...t,
+          completed: !t.completed,
+          updatedAt: Date.now(),
+        }
+      }
+      return t
+    })
 
-    this._saveToStorage(todos)
+    this._saveToStorage(newTodos)
 
-    return todo
+    return newTodos.find((t) => t.id === id)!
   }
 
   /**
@@ -161,11 +170,12 @@ export class LocalTodoRepository implements TodoRepository {
    * 排序任务列表
    * 排序规则：未完成在前 → 创建时间倒序
    * @param todos - 任务数组
-   * @returns 排序后的任务数组
+   * @returns 排序后的新任务数组（不修改原数组）
    * @private
    */
   private _sortTodos(todos: TodoItem[]): TodoItem[] {
-    return todos.sort((a, b) => {
+    // 使用扩展运算符创建新数组，避免修改原数组
+    return [...todos].sort((a, b) => {
       // 先按完成状态排序（未完成在前）
       if (a.completed !== b.completed) {
         return a.completed ? 1 : -1
