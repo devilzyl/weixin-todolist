@@ -112,39 +112,54 @@ Component({
         isSubmitting: true,
       })
 
-      // 更新任务标题
-      const result = repository.updateTitle({
-        id: this.data.id,
-        title,
-      })
-
-      // 结果处理
-      if (result) {
-        // 成功提示
-        wx.showToast({
-          title: '修改成功',
-          icon: 'success',
+      try {
+        // 更新任务标题
+        const result = repository.updateTitle({
+          id: this.data.id,
+          title,
         })
 
-        // 延迟返回，确保数据写入
-        setTimeout(() => {
-          wx.navigateBack()
-        }, 300)
-      } else {
-        // 失败提示
+        // 结果处理
+        if (result) {
+          // 成功提示
+          wx.showToast({
+            title: '修改成功',
+            icon: 'success',
+          })
+
+          // 延迟返回，确保数据写入
+          setTimeout(() => {
+            wx.navigateBack()
+          }, 300)
+        } else {
+          // 失败提示
+          wx.showToast({
+            title: '任务不存在',
+            icon: 'none',
+          })
+
+          // 延迟返回
+          setTimeout(() => {
+            wx.navigateBack()
+          }, 1500)
+        }
+      } catch (error) {
+        // 异常提示
         wx.showToast({
-          title: '任务不存在',
+          title: '修改失败，请重试',
           icon: 'none',
         })
-
-        // 解除提交锁
-        this.setData({
-          isSubmitting: false,
-        })
-
-        // 延迟返回
-        setTimeout(() => {
-          wx.navigateBack()
+      } finally {
+        // 确保释放锁
+        if (this.data.isSubmitting) {
+          setTimeout(() => {
+            this.setData({
+              isSubmitting: false,
+            })
+          }, 300)
+        }
+      }
+    },
         }, 1500)
       }
     },

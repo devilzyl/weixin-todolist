@@ -67,19 +67,36 @@ Component({
         isSubmitting: true,
       })
 
-      // 创建任务
-      repository.create({ title })
+      try {
+        // 创建任务
+        repository.create({ title })
 
-      // 成功提示
-      wx.showToast({
-        title: '创建成功',
-        icon: 'success',
-      })
+        // 成功提示
+        wx.showToast({
+          title: '创建成功',
+          icon: 'success',
+        })
 
-      // 延迟返回，确保数据写入
-      setTimeout(() => {
-        wx.navigateBack()
-      }, 300)
+        // 延迟返回，确保数据写入
+        setTimeout(() => {
+          wx.navigateBack()
+        }, 300)
+      } catch (error) {
+        // 异常提示
+        wx.showToast({
+          title: '创建失败，请重试',
+          icon: 'none',
+        })
+      } finally {
+        // 确保释放锁
+        if (this.data.isSubmitting) {
+          setTimeout(() => {
+            this.setData({
+              isSubmitting: false,
+            })
+          }, 300)
+        }
+      }
     },
 
     /**

@@ -323,77 +323,91 @@ Component({
      * 全部标记为已完成
      */
     handleMarkAllCompleted() {
-      if (this.data.isBusy) {
+      if (this.data.isCreating || this.data.isBatchOperating) {
         return
       }
 
       this.setData({
-        isBusy: true,
+        isBatchOperating: true,
       })
 
-      const affectedCount = repository.markAll({ completed: true })
+      try {
+        const affectedCount = repository.markAll({ completed: true })
 
-      if (affectedCount > 0) {
+        if (affectedCount > 0) {
+          wx.showToast({
+            title: `已将 ${affectedCount} 个任务标记为完成`,
+            icon: 'success',
+          })
+        } else {
+          wx.showToast({
+            title: '暂未完成的任务',
+            icon: 'none',
+          })
+        }
+
+        this.reloadTodos()
+      } catch (error) {
         wx.showToast({
-          title: `已将 ${affectedCount} 个任务标记为完成`,
-          icon: 'success',
-        })
-      } else {
-        wx.showToast({
-          title: '暂未完成的任务',
+          title: '操作失败，请重试',
           icon: 'none',
         })
+      } finally {
+        setTimeout(() => {
+          this.setData({
+            isBatchOperating: false,
+          })
+        }, 300)
       }
-
-      this.reloadTodos()
-
-      setTimeout(() => {
-        this.setData({
-          isBusy: false,
-        })
-      }, 300)
     },
 
     /**
      * 全部标记为未完成
      */
     handleMarkAllActive() {
-      if (this.data.isBusy) {
+      if (this.data.isCreating || this.data.isBatchOperating) {
         return
       }
 
       this.setData({
-        isBusy: true,
+        isBatchOperating: true,
       })
 
-      const affectedCount = repository.markAll({ completed: false })
+      try {
+        const affectedCount = repository.markAll({ completed: false })
 
-      if (affectedCount > 0) {
+        if (affectedCount > 0) {
+          wx.showToast({
+            title: `已将 ${affectedCount} 个任务标记为未完成`,
+            icon: 'success',
+          })
+        } else {
+          wx.showToast({
+            title: '暂无已完成的任务',
+            icon: 'none',
+          })
+        }
+
+        this.reloadTodos()
+      } catch (error) {
         wx.showToast({
-          title: `已将 ${affectedCount} 个任务标记为未完成`,
-          icon: 'success',
-        })
-      } else {
-        wx.showToast({
-          title: '暂无已完成的任务',
+          title: '操作失败，请重试',
           icon: 'none',
         })
+      } finally {
+        setTimeout(() => {
+          this.setData({
+            isBatchOperating: false,
+          })
+        }, 300)
       }
-
-      this.reloadTodos()
-
-      setTimeout(() => {
-        this.setData({
-          isBusy: false,
-        })
-      }, 300)
     },
 
     /**
      * 清除所有已完成的任务
      */
     handleClearCompleted() {
-      if (this.data.isBusy) {
+      if (this.data.isCreating || this.data.isBatchOperating) {
         return
       }
 
@@ -414,25 +428,32 @@ Component({
         success: (res) => {
           if (res.confirm) {
             this.setData({
-              isBusy: true,
+              isBatchOperating: true,
             })
 
-            const deletedCount = repository.clearCompleted()
+            try {
+              const deletedCount = repository.clearCompleted()
 
-            if (deletedCount > 0) {
+              if (deletedCount > 0) {
+                wx.showToast({
+                  title: `已清除 ${deletedCount} 个已完成任务`,
+                  icon: 'success',
+                })
+              }
+
+              this.reloadTodos()
+            } catch (error) {
               wx.showToast({
-                title: `已清除 ${deletedCount} 个已完成任务`,
-                icon: 'success',
+                title: '操作失败，请重试',
+                icon: 'none',
               })
+            } finally {
+              setTimeout(() => {
+                this.setData({
+                  isBatchOperating: false,
+                })
+              }, 300)
             }
-
-            this.reloadTodos()
-
-            setTimeout(() => {
-              this.setData({
-                isBusy: false,
-              })
-            }, 300)
           }
         },
       })

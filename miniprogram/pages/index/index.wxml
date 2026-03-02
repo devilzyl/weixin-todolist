@@ -74,7 +74,7 @@
     <button
       class="batch-btn complete-all"
       bindtap="handleMarkAllCompleted"
-      disabled="{{isBusy}}"
+      disabled="{{isCreating || isBatchOperating}}"
       aria-label="将所有任务标记为已完成"
     >
       <text class="btn-icon">✅</text>
@@ -83,7 +83,7 @@
     <button
       class="batch-btn uncomplete-all"
       bindtap="handleMarkAllActive"
-      disabled="{{isBusy}}"
+      disabled="{{isCreating || isBatchOperating}}"
       aria-label="将所有任务标记为未完成"
     >
       <text class="btn-icon">↩️</text>
@@ -92,7 +92,7 @@
     <button
       class="batch-btn clear-completed"
       bindtap="handleClearCompleted"
-      disabled="{{isBusy || stats.completed === 0}}"
+      disabled="{{isCreating || isBatchOperating || stats.completed === 0}}"
       aria-label="清除所有已完成的任务"
     >
       <text class="btn-icon">🗑️</text>
