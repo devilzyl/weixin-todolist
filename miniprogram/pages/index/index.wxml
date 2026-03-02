@@ -116,7 +116,7 @@
     <view
       wx:for="{{todos}}"
       wx:key="id"
-      class="todo-item {{item.completed ? 'completed' : ''}}"
+      class="todo-item {{item.completed ? 'completed' : ''}} {{item.id === highlightTodoId ? 'is-new' : ''}}"
     >
       <view class="todo-left" bindtap="handleToggle" data-id="{{item.id}}">
         <!-- 自定义复选框 -->

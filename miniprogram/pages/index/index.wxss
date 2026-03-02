@@ -339,6 +339,28 @@ page {
   color: #9ca3af;
 }
 
+/* 新增高亮状态 */
+.todo-item.is-new {
+  animation: newHighlight 0.8s ease-out;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 2rpx solid #10b981;
+}
+
+@keyframes newHighlight {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 /* 左侧区域 */
 .todo-left {
   display: flex;
