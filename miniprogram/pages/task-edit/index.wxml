@@ -1,0 +1,30 @@
+<!-- 任务编辑页面 -->
+<view class="container">
+  <view class="form">
+    <view class="form-item">
+      <text class="label">任务标题</text>
+      <textarea
+        class="textarea"
+        placeholder="请输入任务标题（1-100字）"
+        value="{{title}}"
+        bindinput="onInputChange"
+        maxlength="100"
+        auto-height
+      />
+      <text class="counter">{{titleLength}}/100</text>
+    </view>
+  </view>
+
+  <view class="actions">
+    <button class="cancel-button" bindtap="handleCancel">
+      取消
+    </button>
+    <button
+      class="save-button {{isSubmitting ? 'disabled' : ''}}"
+      bindtap="handleSave"
+      disabled="{{isSubmitting}}"
+    >
+      保存
+    </button>
+  </view>
+</view>

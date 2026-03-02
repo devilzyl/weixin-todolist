@@ -1,7 +1,8 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/task-form/index"
+    "pages/task-form/index",
+    "pages/task-edit/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",
