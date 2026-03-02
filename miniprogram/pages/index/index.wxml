@@ -70,11 +70,12 @@
   </view>
 
   <!-- 批量操作栏 -->
-  <view class="batch-actions" wx:if="{{todos.length > 0}}">
+  <view class="batch-actions" wx:if="{{todos.length > 0}}" role="group" aria-label="批量操作">
     <button
       class="batch-btn complete-all"
       bindtap="handleMarkAllCompleted"
       disabled="{{isBusy}}"
+      aria-label="将所有任务标记为已完成"
     >
       <text class="btn-icon">✅</text>
       <text class="btn-text">全部完成</text>
@@ -83,6 +84,7 @@
       class="batch-btn uncomplete-all"
       bindtap="handleMarkAllActive"
       disabled="{{isBusy}}"
+      aria-label="将所有任务标记为未完成"
     >
       <text class="btn-icon">↩️</text>
       <text class="btn-text">全部取消</text>
@@ -91,6 +93,7 @@
       class="batch-btn clear-completed"
       bindtap="handleClearCompleted"
       disabled="{{isBusy || stats.completed === 0}}"
+      aria-label="清除所有已完成的任务"
     >
       <text class="btn-icon">🗑️</text>
       <text class="btn-text">清除已完成</text>
@@ -117,8 +120,17 @@
       wx:for="{{todos}}"
       wx:key="id"
       class="todo-item {{item.completed ? 'completed' : ''}} {{item.id === highlightTodoId ? 'is-new' : ''}}"
+      role="listitem"
+      aria-label="{{item.title}}，{{item.completed ? '已完成' : '未完成'}}"
     >
-      <view class="todo-left" bindtap="handleToggle" data-id="{{item.id}}">
+      <view
+        class="todo-left"
+        bindtap="handleToggle"
+        data-id="{{item.id}}"
+        role="checkbox"
+        aria-checked="{{item.completed}}"
+        aria-label="切换完成状态"
+      >
         <!-- 自定义复选框 -->
         <view class="custom-checkbox {{item.completed ? 'checked' : ''}}">
           <view class="checkbox-inner">
@@ -129,6 +141,9 @@
         <!-- 任务内容 -->
         <view class="todo-content">
           <text class="todo-title">{{item.title}}</text>
+          <!-- 屏幕阅读器专用状态文本 -->
+          <text class="sr-only" wx:if="{{item.completed}}">已完成</text>
+          <text class="sr-only" wx:else>未完成</text>
         </view>
       </view>
 
@@ -141,6 +156,8 @@
           data-title="{{item.title}}"
           catchtap="navigateToEdit"
           hover-class="edit-btn-hover"
+          role="button"
+          aria-label="编辑任务"
         >
           <text class="edit-icon">✏️</text>
         </view>
@@ -151,6 +168,8 @@
           data-id="{{item.id}}"
           catchtap="handleDelete"
           hover-class="delete-btn-hover"
+          role="button"
+          aria-label="删除任务"
         >
           <text class="delete-icon">🗑️</text>
         </view>
@@ -165,6 +184,8 @@
     hover-class="fab-hover"
     hover-start-time="50"
     hover-stay-time="100"
+    role="button"
+    aria-label="创建新任务"
   >
     <view class="fab-icon">
       <text class="plus-icon">+</text>

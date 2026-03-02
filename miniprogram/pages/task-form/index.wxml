@@ -1,6 +1,6 @@
 <!-- 新增任务页面 -->
 <view class="container">
-  <view class="form">
+  <view class="form" role="form" aria-label="创建新任务">
     <view class="form-item">
       <text class="label">任务标题</text>
       <textarea
@@ -10,19 +10,26 @@
         bindinput="onInputChange"
         maxlength="100"
         auto-height
+        aria-label="任务标题输入框"
+        required
       />
-      <text class="counter">{{title.length}}/100</text>
+      <text class="counter" aria-label="已输入{{title.length}}字，最多100字">{{title.length}}/100</text>
     </view>
   </view>
 
   <view class="actions">
-    <button class="cancel-button" bindtap="handleCancel">
+    <button
+      class="cancel-button"
+      bindtap="handleCancel"
+      aria-label="取消创建"
+    >
       取消
     </button>
     <button
       class="save-button {{isSubmitting ? 'disabled' : ''}}"
       bindtap="handleSave"
       disabled="{{isSubmitting}}"
+      aria-label="保存任务"
     >
       保存
     </button>

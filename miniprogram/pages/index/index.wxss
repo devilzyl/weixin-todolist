@@ -519,3 +519,16 @@ page {
 .fab-hover {
   box-shadow: 0 12rpx 32rpx rgba(102, 126, 234, 0.5);
 }
+
+/* 屏幕阅读器专用内容 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
