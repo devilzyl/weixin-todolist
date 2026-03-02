@@ -27,8 +27,20 @@ Component({
       active: 0,
     },
 
-    /** 操作锁（防止快速连点） */
+    /** 快速输入标题 */
+    quickTitle: '',
+
+    /** 快速创建锁（防止重复创建） */
+    isCreating: false,
+
+    /** 批量操作锁 */
+    isBatchOperating: false,
+
+    /** 操作锁（防止快速连点）- 已废弃，使用上面的细分锁 */
     isBusy: false,
+
+    /** 高亮任务 ID（新增反馈） */
+    highlightTodoId: '',
   },
 
   /** 组件生命周期 */
@@ -83,13 +95,117 @@ Component({
      * 跳转到新增任务页面
      */
     navigateToCreate() {
-      if (this.data.isBusy) {
+      if (this.data.isBusy || this.data.isCreating) {
         return
       }
 
       wx.navigateTo({
         url: '/pages/task-form/index',
       })
+    },
+
+    /**
+     * 快速输入框输入事件
+     * @param e - 事件对象
+     */
+    handleQuickInput(e: any) {
+      this.setData({
+        quickTitle: e.detail.value,
+      })
+    },
+
+    /**
+     * 快速添加并继续输入
+     */
+    handleQuickAddAndContinue() {
+      this.createFromQuickInput({ keepFocus: true })
+    },
+
+    /**
+     * 快速添加并关闭键盘
+     */
+    handleQuickAddAndBlur() {
+      this.createFromQuickInput({ keepFocus: false })
+    },
+
+    /**
+     * 从快速输入创建任务
+     * @param options - 创建选项
+     */
+    createFromQuickInput(options: { keepFocus: boolean }) {
+      // 创建锁检查
+      if (this.data.isCreating || this.data.isBatchOperating) {
+        return
+      }
+
+      // 标题校验
+      const title = this.data.quickTitle.trim()
+
+      // 空标题校验
+      if (title.length === 0) {
+        wx.showToast({
+          title: '请输入任务标题',
+          icon: 'none',
+        })
+        return
+      }
+
+      // 长度校验
+      if (title.length > 100) {
+        wx.showToast({
+          title: '标题不能超过100字',
+          icon: 'none',
+        })
+        return
+      }
+
+      // 设置创建锁
+      this.setData({
+        isCreating: true,
+      })
+
+      try {
+        // 创建任务
+        const newTodo = repository.create({ title })
+
+        // 刷新列表
+        this.reloadTodos()
+
+        // 设置高亮
+        this.setData({
+          highlightTodoId: newTodo.id,
+        })
+
+        // 清空输入框
+        this.setData({
+          quickTitle: '',
+        })
+
+        // 800ms 后清除高亮
+        setTimeout(() => {
+          this.setData({
+            highlightTodoId: '',
+          })
+        }, 800)
+
+        // 成功提示
+        wx.showToast({
+          title: '添加成功',
+          icon: 'success',
+          duration: 1000,
+        })
+      } catch (error) {
+        // 异常提示
+        wx.showToast({
+          title: '添加失败，请重试',
+          icon: 'none',
+        })
+      } finally {
+        // 释放创建锁
+        this.setData({
+          isCreating: false,
+        })
+      }
     },
 
     /**
