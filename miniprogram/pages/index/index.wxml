@@ -25,8 +25,8 @@
       wx:key="id"
       class="task-card {{item.completed ? 'completed' : ''}}"
     >
-      <!-- 任务配图占位符 -->
-      <view class="task-image">
+      <!-- 任务配图占位符（点击切换状态） -->
+      <view class="task-image" bindtap="handleToggle" data-id="{{item.id}}">
         <text class="task-icon">{{item.completed ? '✓' : '○'}}</text>
       </view>
 
