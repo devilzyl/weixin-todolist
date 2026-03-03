@@ -3,25 +3,28 @@
  */
 
 .container {
-  min-height: 100vh;
+  height: 100vh;
   background-color: #F5F7FA;
-  padding: 32rpx;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 
 /* 表单卡片 */
 .form {
+  flex: 1;
   background-color: #FFFFFF;
   border-radius: 24rpx;
-  padding: 32rpx;
+  padding: 24rpx;
+  margin: 24rpx 32rpx;
   box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  overflow-y: auto;
 }
 
 .form-item {
   display: flex;
   flex-direction: column;
-  gap: 16rpx;
+  gap: 12rpx;
 }
 
 .label {
@@ -32,8 +35,9 @@
 
 .textarea {
   width: 100%;
-  min-height: 200rpx;
-  padding: 24rpx;
+  min-height: 160rpx;
+  max-height: 400rpx;
+  padding: 20rpx;
   border: 2rpx solid #E5E5E5;
   border-radius: 16rpx;
   font-size: 32rpx;
@@ -52,23 +56,23 @@
   align-self: flex-end;
   font-size: 24rpx;
   color: #999999;
-  margin-top: 8rpx;
+  margin-top: 4rpx;
 }
 
 /* 操作按钮 */
 .actions {
   display: flex;
   gap: 16rpx;
-  margin-top: auto;
-  padding: 32rpx;
-  padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
+  padding: 24rpx 32rpx;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+  background-color: #F5F7FA;
 }
 
 .cancel-button,
 .save-button {
   flex: 1;
-  padding: 32rpx;
-  min-height: 88rpx;
+  padding: 24rpx 32rpx;
+  height: 88rpx;
   border-radius: 16rpx;
   font-size: 32rpx;
   font-weight: 600;
