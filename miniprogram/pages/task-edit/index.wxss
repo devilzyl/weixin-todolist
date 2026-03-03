@@ -60,14 +60,15 @@
   display: flex;
   gap: 16rpx;
   margin-top: auto;
-  padding-top: 32rpx;
+  padding: 32rpx;
+  padding-bottom: calc(32rpx + env(safe-area-inset-bottom));
 }
 
 .cancel-button,
 .save-button {
   flex: 1;
-  padding: 40rpx 32rpx;
-  min-height: 96rpx;
+  padding: 32rpx;
+  min-height: 88rpx;
   border-radius: 16rpx;
   font-size: 32rpx;
   font-weight: 600;
