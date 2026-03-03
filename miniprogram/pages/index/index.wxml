@@ -2,21 +2,21 @@
 <view class="page">
   <!-- 顶部标题区域 -->
   <view class="header">
-    <text class="header-title">My Tasks</text>
+    <text class="header-title">我的任务</text>
   </view>
 
-  <!-- Today's Focus 区域 -->
+  <!-- 今日关注区域 -->
   <view class="focus-card" wx:if="{{todos.length > 0}}">
-    <text class="focus-subtitle">Today's Focus</text>
-    <text class="focus-desc">You have {{pendingCount}} pending task{{pendingCount > 1 ? 's' : ''}}.</text>
+    <text class="focus-subtitle">今日关注</text>
+    <text class="focus-desc">您有 {{pendingCount}} 个待办任务</text>
   </view>
 
   <!-- 任务列表 -->
   <view class="task-list">
     <!-- 空态 -->
     <view wx:if="{{todos.length === 0}}" class="empty-state">
-      <text class="empty-title">No tasks yet</text>
-      <text class="empty-desc">Create your first task to get started</text>
+      <text class="empty-title">还没有任务</text>
+      <text class="empty-desc">创建您的第一个任务开始使用</text>
     </view>
 
     <!-- 任务卡片 -->
@@ -60,7 +60,7 @@
   <view class="bottom-action">
     <view class="add-btn" bindtap="navigateToCreate">
       <text class="add-icon">+</text>
-      <text class="add-text">Add new task</text>
+      <text class="add-text">添加新任务</text>
     </view>
   </view>
 </view>
