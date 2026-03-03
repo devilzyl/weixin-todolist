@@ -7,6 +7,7 @@
 
 import { LocalTodoRepository } from '../../utils/todo-repository'
 import type { TodoItem } from '../../types/todo'
+import { PRIORITY_CONFIG } from '../../types/todo'
 
 /** 仓储实例 */
 const repository = new LocalTodoRepository()
@@ -19,6 +20,9 @@ Component({
 
     /** 待完成任务数 */
     pendingCount: 0,
+
+    /** 高优先级任务数 */
+    highPriorityCount: 0,
 
     /** 操作锁（防止快速连点） */
     isBusy: false,
@@ -45,6 +49,11 @@ Component({
      */
     show() {
       this.reloadTodos()
+      // 重置所有滑动卡片
+      const swipeCards = this.selectAllComponents('.swipe-card')
+      swipeCards.forEach((card: any) => {
+        card.resetPosition && card.resetPosition()
+      })
     },
   },
 
@@ -65,9 +74,15 @@ Component({
         (t) => t && typeof t.completed === 'boolean' && !t.completed
       ).length
 
+      // 计算高优先级任务数
+      const highPriorityCount = validTodos.filter(
+        (t) => t && !t.completed && t.priority === 'high'
+      ).length
+
       this.setData({
         todos: validTodos,
         pendingCount,
+        highPriorityCount,
       })
     },
 
@@ -93,7 +108,9 @@ Component({
         return
       }
 
-      const { id, title } = e.currentTarget.dataset
+      // 适配滑动卡片组件的事件结构，从 e.detail 获取参数
+      // 同时保留向后兼容：如果 e.detail 不存在，则从 e.currentTarget.dataset 获取
+      const { id, title } = e.detail || e.currentTarget.dataset || {}
 
       if (!id) {
         return
@@ -144,6 +161,36 @@ Component({
         this.setData({
           isBusy: false,
         })
+      }, 300)
+    },
+
+    /**
+     * 切换任务优先级
+     * @param e - 事件对象
+     */
+    handlePriority(e: any) {
+      if (this.data.isBusy) return
+
+      const { id } = e.detail
+      if (!id) return
+
+      this.setData({ isBusy: true })
+
+      const result = repository.cyclePriority(id)
+      if (result) {
+        // 显示提示
+        const priorityLabel = PRIORITY_CONFIG[result.priority].label
+        wx.showToast({
+          title: `优先级：${priorityLabel}`,
+          icon: 'none',
+          duration: 1000,
+        })
+      }
+
+      this.reloadTodos()
+
+      setTimeout(() => {
+        this.setData({ isBusy: false })
       }, 300)
     },
 

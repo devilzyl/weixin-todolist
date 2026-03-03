@@ -50,6 +50,12 @@
   color: #1A1A1A;
 }
 
+/* 高优先级文本 */
+.high-priority {
+  color: #FF4D4F;
+  font-weight: 600;
+}
+
 /* ==================== 任务列表 ==================== */
 
 .task-list {
@@ -87,6 +93,7 @@
 /* ==================== 任务卡片 ==================== */
 
 .task-card {
+  position: relative;
   display: flex;
   align-items: center;
   padding: 24rpx;
@@ -95,6 +102,7 @@
   box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
   gap: 16rpx;
   transition: all 0.2s ease;
+  overflow: hidden;
 }
 
 .task-card:active {
@@ -144,6 +152,21 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* 优先级图标 */
+.priority-badge {
+  position: absolute;
+  top: 16rpx;
+  right: 16rpx;
+  padding: 4rpx 8rpx;
+  background-color: #F5F7FA;
+  border-radius: 8rpx;
+}
+
+.priority-icon {
+  font-size: 24rpx;
+  line-height: 1;
 }
 
 /* 操作按钮 */

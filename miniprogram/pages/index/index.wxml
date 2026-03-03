@@ -8,7 +8,12 @@
   <!-- 今日关注区域 -->
   <view class="focus-card" wx:if="{{todos.length > 0}}">
     <text class="focus-subtitle">今日关注</text>
-    <text class="focus-desc">您有 {{pendingCount}} 个待办任务</text>
+    <text class="focus-desc">
+      您有 {{pendingCount}} 个待办任务
+      <text wx:if="{{highPriorityCount > 0}}" class="high-priority">
+        （{{highPriorityCount}} 个高优先级）
+      </text>
+    </text>
   </view>
 
   <!-- 任务列表 -->
@@ -20,10 +25,15 @@
     </view>
 
     <!-- 任务卡片 -->
-    <view
+    <swipe-card
       wx:for="{{todos}}"
       wx:key="id"
       class="task-card {{item.completed ? 'completed' : ''}}"
+      todo-id="{{item.id}}"
+      title="{{item.title}}"
+      bind:priority="handlePriority"
+      bind:edit="navigateToEdit"
+      bind:delete="handleDelete"
     >
       <!-- 任务配图占位符（点击切换状态） -->
       <view class="task-image" bindtap="handleToggle" data-id="{{item.id}}">
@@ -35,25 +45,11 @@
         <text class="task-title">{{item.title}}</text>
       </view>
 
-      <!-- 操作按钮 -->
-      <view class="task-actions">
-        <view
-          class="action-btn edit-btn"
-          data-id="{{item.id}}"
-          data-title="{{item.title}}"
-          catchtap="navigateToEdit"
-        >
-          <text class="action-icon">✏️</text>
-        </view>
-        <view
-          class="action-btn delete-btn"
-          data-id="{{item.id}}"
-          catchtap="handleDelete"
-        >
-          <text class="action-icon">🗑️</text>
-        </view>
+      <!-- 优先级图标 -->
+      <view class="priority-badge">
+        <text class="priority-icon">{{item.priority === 'high' ? '🔴⭐⭐' : item.priority === 'medium' ? '🟡⭐' : '🟢'}}</text>
       </view>
-    </view>
+    </swipe-card>
   </view>
 
   <!-- 底部新增按钮（固定） -->
