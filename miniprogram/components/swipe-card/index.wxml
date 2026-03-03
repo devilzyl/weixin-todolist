@@ -1,19 +1,5 @@
-<!--滑动卡片组件-->
-<movable-area class="swipe-area">
-  <movable-view
-    class="swipe-content"
-    direction="horizontal"
-    x="{{translateX}}"
-    damping="40"
-    friction="10"
-    bindchange="onMove"
-    bindtouchend="onTouchEnd"
-  >
-    <!--卡片内容插槽-->
-    <slot></slot>
-  </movable-view>
-
-  <!--操作按钮区域-->
+<!-- 滑动卡片组件 -->
+<view class="swipe-area">
   <view class="action-buttons">
     <view
       class="action-btn priority-btn"
@@ -38,4 +24,15 @@
       <text class="action-text">删除</text>
     </view>
   </view>
-</movable-area>
+
+  <view
+    class="swipe-content"
+    style="transform: translateX({{translateX}}px);"
+    bindtouchstart="onTouchStart"
+    bindtouchmove="onTouchMove"
+    bindtouchend="onTouchEnd"
+    bindtouchcancel="onTouchEnd"
+  >
+    <slot></slot>
+  </view>
+</view>

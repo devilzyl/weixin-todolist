@@ -22,12 +22,18 @@ Component({
 
   /** 组件数据 */
   data: {
-    /** 滑动偏移量 */
+    /** 滑动偏移量（px） */
     translateX: 0,
     /** 按钮总宽度（px） */
     buttonWidth: 0,
     /** 是否正在滑动 */
     isSwiping: false,
+    /** 触摸起点 X */
+    touchStartX: 0,
+    /** 触摸起点 Y */
+    touchStartY: 0,
+    /** 触摸开始时的偏移量 */
+    startTranslateX: 0,
   },
 
   lifetimes: {
@@ -45,30 +51,55 @@ Component({
   /** 组件方法 */
   methods: {
     /**
-     * 滑动移动事件
+     * 触摸开始
      */
-    onMove(e: any) {
-      this.setData({ isSwiping: true })
+    onTouchStart(e: any) {
+      const touch = e.touches && e.touches[0]
+      if (!touch) return
 
-      const x = e.detail.x
-      // 限制只能向左滑动
-      if (x > 0) return
-
-      // 限制最大滑动距离
-      const maxTranslate = -this.data.buttonWidth
-      if (x < maxTranslate) return
-
-      // 过滤轻微触摸抖动，避免点击时出现彩色细边
-      if (x > -6) {
-        this.setData({ translateX: 0 })
-        return
-      }
-
-      this.setData({ translateX: x })
+      this.setData({
+        touchStartX: touch.clientX,
+        touchStartY: touch.clientY,
+        startTranslateX: this.data.translateX,
+        isSwiping: false,
+      })
     },
 
     /**
-     * 触摸结束事件
+     * 触摸移动
+     */
+    onTouchMove(e: any) {
+      const touch = e.touches && e.touches[0]
+      if (!touch) return
+
+      const deltaX = touch.clientX - this.data.touchStartX
+      const deltaY = touch.clientY - this.data.touchStartY
+
+      // 纵向滚动优先
+      if (!this.data.isSwiping && Math.abs(deltaY) > Math.abs(deltaX)) {
+        return
+      }
+
+      const rawX = this.data.startTranslateX + deltaX
+      const nextX = Math.max(-this.data.buttonWidth, Math.min(0, rawX))
+
+      // 过滤轻微抖动，避免点击时露出彩线
+      if (nextX > -6) {
+        this.setData({
+          isSwiping: true,
+          translateX: 0,
+        })
+        return
+      }
+
+      this.setData({
+        isSwiping: true,
+        translateX: nextX,
+      })
+    },
+
+    /**
+     * 触摸结束
      */
     onTouchEnd() {
       const { translateX, buttonWidth } = this.data
@@ -80,7 +111,6 @@ Component({
         this.setData({ translateX: 0 })
       }
 
-      // 延迟重置滑动状态，避免立即触发点击
       setTimeout(() => {
         this.setData({ isSwiping: false })
       }, 100)
@@ -101,7 +131,7 @@ Component({
       this.resetPosition()
       this.triggerEvent('edit', {
         id: e.currentTarget.dataset.id,
-        title: e.currentTarget.dataset.title
+        title: e.currentTarget.dataset.title,
       })
     },
 
