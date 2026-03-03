@@ -6,6 +6,7 @@
  */
 
 import type { TodoItem, TodoRepository } from '../types/todo'
+import { DEFAULT_PRIORITY } from '../types/todo'
 
 /** 本地存储键名 */
 const STORAGE_KEY = 'todos:v1'
@@ -226,17 +227,19 @@ export class LocalTodoRepository implements TodoRepository {
     }
 
     // 情况 3：数组元素校验，过滤掉非法项
-    const validTodos = rawData.filter((item: any) => {
-      return (
-        item &&
-        typeof item === 'object' &&
-        typeof item.id === 'string' &&
-        typeof item.title === 'string' &&
-        typeof item.completed === 'boolean' &&
-        typeof item.createdAt === 'number' &&
-        typeof item.updatedAt === 'number'
-      )
-    })
+    const validTodos = rawData
+      .filter((item: any) => {
+        return (
+          item &&
+          typeof item === 'object' &&
+          typeof item.id === 'string' &&
+          typeof item.title === 'string' &&
+          typeof item.completed === 'boolean' &&
+          typeof item.createdAt === 'number' &&
+          typeof item.updatedAt === 'number'
+        )
+      })
+      .map((item: TodoItem) => this._healItem(item))
 
     // 如果有非法项被过滤掉，写回清洗后的数据
     if (validTodos.length !== rawData.length) {
@@ -245,6 +248,21 @@ export class LocalTodoRepository implements TodoRepository {
     }
 
     return validTodos as TodoItem[]
+  }
+
+  /**
+   * 修复单个任务项
+   * 为旧数据添加默认优先级
+   * @param item - 任务项
+   * @returns 修复后的任务项
+   * @private
+   */
+  private _healItem(item: TodoItem): TodoItem {
+    // 为旧数据添加默认优先级
+    if (!item.priority) {
+      return { ...item, priority: DEFAULT_PRIORITY }
+    }
+    return item
   }
 
   /**
