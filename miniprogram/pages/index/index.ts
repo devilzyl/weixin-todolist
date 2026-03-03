@@ -49,6 +49,11 @@ Component({
      */
     show() {
       this.reloadTodos()
+      // 重置所有滑动卡片
+      const swipeCards = this.selectAllComponents('.swipe-card')
+      swipeCards.forEach((card: any) => {
+        card.resetPosition && card.resetPosition()
+      })
     },
   },
 

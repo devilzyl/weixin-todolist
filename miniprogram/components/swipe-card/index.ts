@@ -26,6 +26,8 @@ Component({
     translateX: 0,
     /** 按钮总宽度 */
     buttonWidth: 360,  // 3个按钮 * 120rpx
+    /** 是否正在滑动 */
+    isSwiping: false,
   },
 
   /** 组件方法 */
@@ -34,6 +36,8 @@ Component({
      * 滑动移动事件
      */
     onMove(e: any) {
+      this.setData({ isSwiping: true })
+
       const x = e.detail.x
       // 限制只能向左滑动
       if (x > 0) return
@@ -57,6 +61,11 @@ Component({
       } else {
         this.setData({ translateX: 0 })
       }
+
+      // 延迟重置滑动状态，避免立即触发点击
+      setTimeout(() => {
+        this.setData({ isSwiping: false })
+      }, 100)
     },
 
     /**
