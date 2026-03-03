@@ -63,7 +63,7 @@
 .actions {
   display: flex;
   gap: 16rpx;
-  padding: 24rpx 32rpx;
+  padding: 48rpx 32rpx;
   padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
   background-color: #F5F7FA;
 }
