@@ -22,6 +22,9 @@ export type TodoItem = {
 
   /** 更新时间戳 */
   updatedAt: number
+
+  /** 优先级（high: 高 / medium: 中 / low: 低） */
+  priority: TodoPriority
 }
 
 /**
@@ -76,4 +79,33 @@ export interface TodoRepository {
    * @returns 删除的任务数量
    */
   clearCompleted(): number
+}
+
+/**
+ * 任务优先级类型
+ */
+export type TodoPriority = 'high' | 'medium' | 'low'
+
+/**
+ * 优先级配置常量
+ * 定义每个优先级的标签、图标和颜色
+ */
+export const PRIORITY_CONFIG = {
+  high: { label: '高', icon: '🔴⭐⭐', color: '#FF4D4F', value: 'high' as TodoPriority },
+  medium: { label: '中', icon: '🟡⭐', color: '#FFA500', value: 'medium' as TodoPriority },
+  low: { label: '低', icon: '🟢', color: '#52C41A', value: 'low' as TodoPriority },
+} as const
+
+/**
+ * 默认优先级
+ */
+export const DEFAULT_PRIORITY: TodoPriority = 'medium'
+
+/**
+ * 获取优先级配置
+ * @param priority - 优先级值
+ * @returns 优先级配置对象
+ */
+export function getPriorityConfig(priority: TodoPriority) {
+  return PRIORITY_CONFIG[priority]
 }
