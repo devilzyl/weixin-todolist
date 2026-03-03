@@ -11,6 +11,5 @@ App<IAppOption>({
    */
   onLaunch() {
     // TodoList 应用启动
-    console.log('TodoList 应用已启动')
   },
 })
