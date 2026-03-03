@@ -2,8 +2,7 @@
  * 全局样式 - 极简设计
  */
 
-/* 引入设计系统 */
-@import "styles/variables.wxss";
+/* 引入通用组件样式 */
 @import "styles/components.wxss";
 
 /* ==================== 全局重置 ==================== */
