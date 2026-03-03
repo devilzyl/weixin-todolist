@@ -1,195 +1,66 @@
-<!-- TodoList 列表页 -->
-<view class="container">
-  <!-- 统计卡片 -->
-  <view class="stats-container">
-    <view class="stat-card primary">
-      <view class="stat-icon">
-        <text class="icon">📋</text>
-      </view>
-      <view class="stat-content">
-        <text class="stat-value">{{stats.total}}</text>
-        <text class="stat-label">全部任务</text>
-      </view>
-    </view>
-
-    <view class="stat-card success">
-      <view class="stat-icon">
-        <text class="icon">✅</text>
-      </view>
-      <view class="stat-content">
-        <text class="stat-value">{{stats.completed}}</text>
-        <text class="stat-label">已完成</text>
-      </view>
-    </view>
-
-    <view class="stat-card warning">
-      <view class="stat-icon">
-        <text class="icon">⏳</text>
-      </view>
-      <view class="stat-content">
-        <text class="stat-value">{{stats.active}}</text>
-        <text class="stat-label">待完成</text>
-      </view>
-    </view>
+<!-- TodoList 极简首页 -->
+<view class="page">
+  <!-- 顶部标题区域 -->
+  <view class="header">
+    <text class="header-title">My Tasks</text>
   </view>
 
-  <!-- 快速创建区 -->
-  <view class="quick-create">
-    <view class="quick-input-wrapper">
-      <input
-        class="quick-input"
-        type="text"
-        placeholder="输入新任务..."
-        value="{{quickTitle}}"
-        bindinput="handleQuickInput"
-        confirm-type="done"
-        disabled="{{isCreating || isBatchOperating}}"
-        maxlength="100"
-        aria-label="新任务标题输入框"
-      />
-      <text class="quick-counter">{{quickTitle.length}}/100</text>
-    </view>
-    <view class="quick-actions">
-      <button
-        class="quick-btn primary"
-        bindtap="handleQuickAddAndContinue"
-        disabled="{{isCreating || isBatchOperating}}"
-        aria-label="添加并继续输入"
-      >
-        添加并继续
-      </button>
-      <button
-        class="quick-btn secondary"
-        bindtap="handleQuickAddAndBlur"
-        disabled="{{isCreating || isBatchOperating}}"
-        aria-label="添加并关闭键盘"
-      >
-        添加并完成
-      </button>
-    </view>
-  </view>
-
-  <!-- 批量操作栏 -->
-  <view class="batch-actions" wx:if="{{todos.length > 0}}" role="group" aria-label="批量操作">
-    <button
-      class="batch-btn complete-all"
-      bindtap="handleMarkAllCompleted"
-      disabled="{{isCreating || isBatchOperating}}"
-      aria-label="将所有任务标记为已完成"
-    >
-      <text class="btn-icon">✅</text>
-      <text class="btn-text">全部完成</text>
-    </button>
-    <button
-      class="batch-btn uncomplete-all"
-      bindtap="handleMarkAllActive"
-      disabled="{{isCreating || isBatchOperating}}"
-      aria-label="将所有任务标记为未完成"
-    >
-      <text class="btn-icon">↩️</text>
-      <text class="btn-text">全部取消</text>
-    </button>
-    <button
-      class="batch-btn clear-completed"
-      bindtap="handleClearCompleted"
-      disabled="{{isCreating || isBatchOperating || stats.completed === 0}}"
-      aria-label="清除所有已完成的任务"
-    >
-      <text class="btn-icon">🗑️</text>
-      <text class="btn-text">清除已完成</text>
-    </button>
+  <!-- Today's Focus 区域 -->
+  <view class="focus-card" wx:if="{{todos.length > 0}}">
+    <text class="focus-subtitle">Today's Focus</text>
+    <text class="focus-desc">You have {{pendingCount}} pending task{{pendingCount > 1 ? 's' : ''}}.</text>
   </view>
 
   <!-- 任务列表 -->
-  <view class="todo-list">
+  <view class="task-list">
     <!-- 空态 -->
     <view wx:if="{{todos.length === 0}}" class="empty-state">
-      <view class="empty-illustration">
-        <view class="illustration-circle"></view>
-        <view class="illustration-icon">📝</view>
-      </view>
-      <text class="empty-title">还没有任务</text>
-      <text class="empty-desc">点击右下角按钮创建第一个任务吧</text>
-      <view class="empty-action" bindtap="navigateToCreate">
-        <text class="action-text">立即创建</text>
-      </view>
+      <text class="empty-title">No tasks yet</text>
+      <text class="empty-desc">Create your first task to get started</text>
     </view>
 
-    <!-- 任务项 -->
+    <!-- 任务卡片 -->
     <view
       wx:for="{{todos}}"
       wx:key="id"
-      class="todo-item {{item.completed ? 'completed' : ''}} {{item.id === highlightTodoId ? 'is-new' : ''}}"
-      role="listitem"
-      aria-label="{{item.title}}，{{item.completed ? '已完成' : '未完成'}}"
+      class="task-card {{item.completed ? 'completed' : ''}}"
     >
-      <view
-        class="todo-left"
-        bindtap="handleToggle"
-        data-id="{{item.id}}"
-        role="checkbox"
-        aria-checked="{{item.completed}}"
-        aria-label="切换完成状态"
-      >
-        <!-- 自定义复选框 -->
-        <view class="custom-checkbox {{item.completed ? 'checked' : ''}}">
-          <view class="checkbox-inner">
-            <text class="check-icon" wx:if="{{item.completed}}">✓</text>
-          </view>
-        </view>
-
-        <!-- 任务内容 -->
-        <view class="todo-content">
-          <text class="todo-title">{{item.title}}</text>
-          <!-- 屏幕阅读器专用状态文本 -->
-          <text class="sr-only" wx:if="{{item.completed}}">已完成</text>
-          <text class="sr-only" wx:else>未完成</text>
-        </view>
+      <!-- 任务配图占位符 -->
+      <view class="task-image">
+        <text class="task-icon">{{item.completed ? '✓' : '○'}}</text>
       </view>
 
-      <!-- 操作按钮组 -->
-      <view class="action-buttons">
-        <!-- 编辑按钮 -->
+      <!-- 任务内容 -->
+      <view class="task-content" bindtap="handleToggle" data-id="{{item.id}}">
+        <text class="task-title">{{item.title}}</text>
+      </view>
+
+      <!-- 操作按钮 -->
+      <view class="task-actions">
         <view
-          class="edit-btn"
+          class="action-btn edit-btn"
           data-id="{{item.id}}"
           data-title="{{item.title}}"
           catchtap="navigateToEdit"
-          hover-class="edit-btn-hover"
-          role="button"
-          aria-label="编辑任务"
         >
-          <text class="edit-icon">✏️</text>
+          <text class="action-icon">✏️</text>
         </view>
-
-        <!-- 删除按钮 -->
         <view
-          class="delete-btn"
+          class="action-btn delete-btn"
           data-id="{{item.id}}"
           catchtap="handleDelete"
-          hover-class="delete-btn-hover"
-          role="button"
-          aria-label="删除任务"
         >
-          <text class="delete-icon">🗑️</text>
+          <text class="action-icon">🗑️</text>
         </view>
       </view>
     </view>
   </view>
 
-  <!-- 浮动新增按钮 -->
-  <view
-    class="fab-button"
-    bindtap="navigateToCreate"
-    hover-class="fab-hover"
-    hover-start-time="50"
-    hover-stay-time="100"
-    role="button"
-    aria-label="创建新任务"
-  >
-    <view class="fab-icon">
-      <text class="plus-icon">+</text>
+  <!-- 底部新增按钮（固定） -->
+  <view class="bottom-action">
+    <view class="add-btn" bindtap="navigateToCreate">
+      <text class="add-icon">+</text>
+      <text class="add-text">Add new task</text>
     </view>
-    <view class="fab-text">新增</view>
   </view>
 </view>
