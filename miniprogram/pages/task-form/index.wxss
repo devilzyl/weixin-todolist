@@ -3,22 +3,19 @@
  */
 
 .container {
-  height: 100vh;
+  min-height: 100vh;
   background-color: #F5F7FA;
-  display: flex;
-  flex-direction: column;
+  padding: 24rpx 32rpx;
+  padding-bottom: 180rpx;
   box-sizing: border-box;
 }
 
 /* 表单卡片 */
 .form {
-  flex: 1;
   background-color: #FFFFFF;
   border-radius: 24rpx;
   padding: 24rpx;
-  margin: 24rpx 32rpx;
   box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
-  overflow-y: auto;
 }
 
 .form-item {
@@ -61,11 +58,15 @@
 
 /* 操作按钮 */
 .actions {
-  display: flex;
-  gap: 16rpx;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
   padding: 24rpx 32rpx;
   padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
   background-color: #F5F7FA;
+  display: flex;
+  gap: 16rpx;
 }
 
 .cancel-button,
