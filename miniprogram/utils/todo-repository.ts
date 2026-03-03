@@ -36,6 +36,7 @@ export class LocalTodoRepository implements TodoRepository {
       id: this._generateId(),
       title: input.title,
       completed: false,
+      priority: DEFAULT_PRIORITY,
       createdAt: now,
       updatedAt: now,
     }
