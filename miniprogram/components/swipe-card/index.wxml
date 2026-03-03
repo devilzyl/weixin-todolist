@@ -1,0 +1,41 @@
+<!--滑动卡片组件-->
+<movable-area class="swipe-area">
+  <movable-view
+    class="swipe-content"
+    direction="horizontal"
+    x="{{translateX}}"
+    damping="40"
+    friction="10"
+    bindchange="onMove"
+    bindtouchend="onTouchEnd"
+  >
+    <!--卡片内容插槽-->
+    <slot></slot>
+  </movable-view>
+
+  <!--操作按钮区域-->
+  <view class="action-buttons">
+    <view
+      class="action-btn priority-btn"
+      catchtap="onPriority"
+      data-id="{{todoId}}"
+    >
+      <text class="action-text">优先级</text>
+    </view>
+    <view
+      class="action-btn edit-btn"
+      catchtap="onEdit"
+      data-id="{{todoId}}"
+      data-title="{{title}}"
+    >
+      <text class="action-text">编辑</text>
+    </view>
+    <view
+      class="action-btn delete-btn"
+      catchtap="onDelete"
+      data-id="{{todoId}}"
+    >
+      <text class="action-text">删除</text>
+    </view>
+  </view>
+</movable-area>
