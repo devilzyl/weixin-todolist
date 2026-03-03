@@ -103,7 +103,9 @@ Component({
         return
       }
 
-      const { id, title } = e.currentTarget.dataset
+      // 适配滑动卡片组件的事件结构，从 e.detail 获取参数
+      // 同时保留向后兼容：如果 e.detail 不存在，则从 e.currentTarget.dataset 获取
+      const { id, title } = e.detail || e.currentTarget.dataset || {}
 
       if (!id) {
         return
