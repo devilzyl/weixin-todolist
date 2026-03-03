@@ -24,10 +24,22 @@ Component({
   data: {
     /** 滑动偏移量 */
     translateX: 0,
-    /** 按钮总宽度 */
-    buttonWidth: 360,  // 3个按钮 * 120rpx
+    /** 按钮总宽度（px） */
+    buttonWidth: 0,
     /** 是否正在滑动 */
     isSwiping: false,
+  },
+
+  lifetimes: {
+    /**
+     * 组件挂载时，按当前设备宽度将 rpx 换算为 px
+     * 3 个按钮 * 120rpx = 360rpx
+     */
+    attached() {
+      const windowInfo = wx.getWindowInfo()
+      const buttonWidth = (360 * windowInfo.windowWidth) / 750
+      this.setData({ buttonWidth })
+    },
   },
 
   /** 组件方法 */
@@ -45,6 +57,12 @@ Component({
       // 限制最大滑动距离
       const maxTranslate = -this.data.buttonWidth
       if (x < maxTranslate) return
+
+      // 过滤轻微触摸抖动，避免点击时出现彩色细边
+      if (x > -6) {
+        this.setData({ translateX: 0 })
+        return
+      }
 
       this.setData({ translateX: x })
     },

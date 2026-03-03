@@ -61,7 +61,8 @@
 .task-list {
   flex: 1;
   padding: 0 32rpx;
-  padding-bottom: 120rpx;
+  /* 预留底部固定新增按钮区域，避免任务卡片滚动覆盖 */
+  padding-bottom: calc(220rpx + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   gap: 16rpx;
@@ -202,6 +203,7 @@
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 999;
   padding: 24rpx 32rpx;
   padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
   background-color: #FFFFFF;
