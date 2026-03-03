@@ -1,4 +1,5 @@
 {
   "navigationBarTitleText": "新增任务",
+  "disableScroll": true,
   "usingComponents": {}
 }
