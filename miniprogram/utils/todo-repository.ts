@@ -5,7 +5,7 @@
  * 包含存储自愈、排序、ID 生成等核心逻辑
  */
 
-import type { TodoItem, TodoRepository } from '../types/todo'
+import type { TodoItem, TodoRepository, TodoPriority } from '../types/todo'
 import { DEFAULT_PRIORITY } from '../types/todo'
 
 /** 本地存储键名 */
@@ -178,6 +178,43 @@ export class LocalTodoRepository implements TodoRepository {
     this._saveToStorage(activeTodos)
 
     return deletedCount
+  }
+
+  /**
+   * 切换任务优先级
+   * 循环顺序：high -> medium -> low -> high
+   * @param id - 任务 ID
+   * @returns 更新后的任务，不存在时返回 null
+   */
+  cyclePriority(id: string): TodoItem | null {
+    const todos = this.list()
+    const todo = todos.find((t) => t.id === id)
+
+    if (!todo) {
+      return null
+    }
+
+    // 优先级循环：high -> medium -> low -> high
+    const priorityOrder: TodoPriority[] = ['high', 'medium', 'low']
+    const currentIndex = priorityOrder.indexOf(todo.priority)
+    const nextIndex = (currentIndex + 1) % priorityOrder.length
+    const nextPriority = priorityOrder[nextIndex]
+
+    // 创建新数组避免直接修改 list() 返回的引用
+    const newTodos = todos.map((t) => {
+      if (t.id === id) {
+        return {
+          ...t,
+          priority: nextPriority,
+          updatedAt: Date.now(),
+        }
+      }
+      return t
+    })
+
+    this._saveToStorage(newTodos)
+
+    return newTodos.find((t) => t.id === id)!
   }
 
   /**

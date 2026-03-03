@@ -79,6 +79,13 @@ export interface TodoRepository {
    * @returns 删除的任务数量
    */
   clearCompleted(): number
+
+  /**
+   * 切换任务优先级
+   * @param id - 任务 ID
+   * @returns 更新后的任务，不存在时返回 null
+   */
+  cyclePriority(id: string): TodoItem | null
 }
 
 /**
