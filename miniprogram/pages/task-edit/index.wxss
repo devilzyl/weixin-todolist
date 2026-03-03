@@ -1,110 +1,113 @@
 /**
- * 任务编辑页面样式
+ * 新增任务页面 - 极简样式
  */
 
 .container {
-  display: flex;
-  flex-direction: column;
   min-height: 100vh;
-  background-color: #f9fafb;
-  padding: 24rpx;
+  background-color: #F5F7FA;
+  padding: 24rpx 32rpx;
+  padding-bottom: 180rpx;
+  box-sizing: border-box;
 }
 
-/* 表单区域 */
+/* 表单卡片 */
 .form {
-  background-color: #fff;
-  border-radius: 16rpx;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
   padding: 24rpx;
-  margin-bottom: 24rpx;
   box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
 }
 
 .form-item {
   display: flex;
   flex-direction: column;
+  gap: 12rpx;
 }
 
 .label {
   font-size: 28rpx;
-  color: #1f2937;
-  margin-bottom: 16rpx;
-  font-weight: 600;
+  font-weight: 500;
+  color: #666666;
 }
 
 .textarea {
   width: 100%;
-  min-height: 200rpx;
-  padding: 16rpx;
-  border: 2rpx solid #e5e7eb;
-  border-radius: 12rpx;
-  font-size: 30rpx;
+  min-height: 160rpx;
+  max-height: 400rpx;
+  padding: 20rpx;
+  border: 2rpx solid #E5E5E5;
+  border-radius: 16rpx;
+  font-size: 32rpx;
+  background-color: #FAFAFA;
+  color: #1A1A1A;
   box-sizing: border-box;
-  background-color: #f9fafb;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .textarea:focus {
-  border-color: #667eea;
-  background-color: #fff;
+  border-color: #4A90E2;
+  background-color: #FFFFFF;
 }
 
 .counter {
   align-self: flex-end;
   font-size: 24rpx;
-  color: #9ca3af;
-  margin-top: 8rpx;
+  color: #999999;
+  margin-top: 4rpx;
 }
 
-/* 操作按钮区域 */
+/* 操作按钮 */
 .actions {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 24rpx 32rpx;
+  padding-bottom: calc(24rpx + env(safe-area-inset-bottom));
+  background-color: #F5F7FA;
   display: flex;
   gap: 16rpx;
-  margin-top: auto;
-  /* 底部安全区域适配，避免与 iPhone 白条干涉 */
-  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
 }
 
 .cancel-button,
 .save-button {
   flex: 1;
-  /* 增大按钮尺寸 */
-  padding: 32rpx 24rpx;
+  padding: 24rpx 32rpx;
+  height: 88rpx;
   border-radius: 16rpx;
   font-size: 32rpx;
   font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
-  /* 增加最小高度 */
-  min-height: 96rpx;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease;
 }
 
 .cancel-button {
-  background-color: #fff;
-  color: #6b7280;
-  border: 2rpx solid #e5e7eb;
+  background-color: #FFFFFF;
+  color: #666666;
+  border: 2rpx solid #E5E5E5;
 }
 
 .cancel-button:active {
-  transform: scale(0.98);
-  background-color: #f9fafb;
+  background-color: #F5F7FA;
 }
 
 .save-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #fff;
+  background-color: #4A90E2;
+  color: #FFFFFF;
   border: none;
 }
 
 .save-button:active {
-  transform: scale(0.98);
-  box-shadow: 0 2rpx 8rpx rgba(102, 126, 234, 0.3);
+  background-color: #3A7BC8;
 }
 
 .save-button.disabled {
-  background: #d1d5db;
-  color: #9ca3af;
-  box-shadow: none;
+  background-color: #E5E5E5;
+  color: #999999;
+}
+
+.save-button::after {
+  border: none;
 }

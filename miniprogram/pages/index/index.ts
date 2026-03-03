@@ -1,8 +1,8 @@
 /**
- * TodoList 列表页
+ * TodoList 列表页 - 极简版
  *
- * 展示任务列表、统计信息
- * 支持任务完成状态切换和删除
+ * 展示任务列表
+ * 支持任务完成状态切换、编辑和删除
  */
 
 import { LocalTodoRepository } from '../../utils/todo-repository'
@@ -17,26 +17,10 @@ Component({
     /** 任务列表 */
     todos: [] as TodoItem[],
 
-    /** 统计信息 */
-    stats: {
-      /** 总数 */
-      total: 0,
-      /** 已完成数 */
-      completed: 0,
-      /** 未完成数 */
-      active: 0,
-    },
+    /** 待完成任务数 */
+    pendingCount: 0,
 
-    /** 快速输入标题 */
-    quickTitle: '',
-
-    /** 快速创建锁（防止重复创建） */
-    isCreating: false,
-
-    /** 批量操作锁 */
-    isBatchOperating: false,
-
-    /** 操作锁（防止快速连点）- 已废弃，使用上面的细分锁 */
+    /** 操作锁（防止快速连点） */
     isBusy: false,
 
     /** 高亮任务 ID（新增反馈） */
@@ -68,7 +52,7 @@ Component({
   methods: {
     /**
      * 重新加载任务列表
-     * 从仓储读取数据并更新页面状态和统计
+     * 从仓储读取数据并更新页面状态
      */
     reloadTodos() {
       const todos = repository.list()
@@ -76,18 +60,14 @@ Component({
       // 确保 todos 是一个有效的数组
       const validTodos = Array.isArray(todos) ? todos : []
 
-      // 计算统计数据，过滤掉可能的无效项
-      const total = validTodos.length
-      const completed = validTodos.filter((t) => t && typeof t.completed === 'boolean' && t.completed).length
-      const active = total - completed
+      // 计算待完成任务数
+      const pendingCount = validTodos.filter(
+        (t) => t && typeof t.completed === 'boolean' && !t.completed
+      ).length
 
       this.setData({
         todos: validTodos,
-        stats: {
-          total,
-          completed,
-          active,
-        },
+        pendingCount,
       })
     },
 
@@ -95,117 +75,13 @@ Component({
      * 跳转到新增任务页面
      */
     navigateToCreate() {
-      if (this.data.isBusy || this.data.isCreating) {
+      if (this.data.isBusy) {
         return
       }
 
       wx.navigateTo({
         url: '/pages/task-form/index',
       })
-    },
-
-    /**
-     * 快速输入框输入事件
-     * @param e - 事件对象
-     */
-    handleQuickInput(e: any) {
-      this.setData({
-        quickTitle: e.detail.value,
-      })
-    },
-
-    /**
-     * 快速添加并继续输入
-     */
-    handleQuickAddAndContinue() {
-      this.createFromQuickInput({ keepFocus: true })
-    },
-
-    /**
-     * 快速添加并关闭键盘
-     */
-    handleQuickAddAndBlur() {
-      this.createFromQuickInput({ keepFocus: false })
-    },
-
-    /**
-     * 从快速输入创建任务
-     * @param options - 创建选项
-     */
-    createFromQuickInput(options: { keepFocus: boolean }) {
-      // 创建锁检查
-      if (this.data.isCreating || this.data.isBatchOperating) {
-        return
-      }
-
-      // 标题校验
-      const title = this.data.quickTitle.trim()
-
-      // 空标题校验
-      if (title.length === 0) {
-        wx.showToast({
-          title: '请输入任务标题',
-          icon: 'none',
-        })
-        return
-      }
-
-      // 长度校验
-      if (title.length > 100) {
-        wx.showToast({
-          title: '标题不能超过100字',
-          icon: 'none',
-        })
-        return
-      }
-
-      // 设置创建锁
-      this.setData({
-        isCreating: true,
-      })
-
-      try {
-        // 创建任务
-        const newTodo = repository.create({ title })
-
-        // 刷新列表
-        this.reloadTodos()
-
-        // 设置高亮
-        this.setData({
-          highlightTodoId: newTodo.id,
-        })
-
-        // 清空输入框
-        this.setData({
-          quickTitle: '',
-        })
-
-        // 800ms 后清除高亮
-        setTimeout(() => {
-          this.setData({
-            highlightTodoId: '',
-          })
-        }, 800)
-
-        // 成功提示
-        wx.showToast({
-          title: '添加成功',
-          icon: 'success',
-          duration: 1000,
-        })
-      } catch (error) {
-        // 异常提示
-        wx.showToast({
-          title: '添加失败，请重试',
-          icon: 'none',
-        })
-      } finally {
-        // 释放创建锁
-        this.setData({
-          isCreating: false,
-        })
-      }
     },
 
     /**
@@ -314,146 +190,6 @@ Component({
                 isBusy: false,
               })
             }, 300)
-          }
-        },
-      })
-    },
-
-    /**
-     * 全部标记为已完成
-     */
-    handleMarkAllCompleted() {
-      if (this.data.isCreating || this.data.isBatchOperating) {
-        return
-      }
-
-      this.setData({
-        isBatchOperating: true,
-      })
-
-      try {
-        const affectedCount = repository.markAll({ completed: true })
-
-        if (affectedCount > 0) {
-          wx.showToast({
-            title: `已将 ${affectedCount} 个任务标记为完成`,
-            icon: 'success',
-          })
-        } else {
-          wx.showToast({
-            title: '暂未完成的任务',
-            icon: 'none',
-          })
-        }
-
-        this.reloadTodos()
-      } catch (error) {
-        wx.showToast({
-          title: '操作失败，请重试',
-          icon: 'none',
-        })
-      } finally {
-        setTimeout(() => {
-          this.setData({
-            isBatchOperating: false,
-          })
-        }, 300)
-      }
-    },
-
-    /**
-     * 全部标记为未完成
-     */
-    handleMarkAllActive() {
-      if (this.data.isCreating || this.data.isBatchOperating) {
-        return
-      }
-
-      this.setData({
-        isBatchOperating: true,
-      })
-
-      try {
-        const affectedCount = repository.markAll({ completed: false })
-
-        if (affectedCount > 0) {
-          wx.showToast({
-            title: `已将 ${affectedCount} 个任务标记为未完成`,
-            icon: 'success',
-          })
-        } else {
-          wx.showToast({
-            title: '暂无已完成的任务',
-            icon: 'none',
-          })
-        }
-
-        this.reloadTodos()
-      } catch (error) {
-        wx.showToast({
-          title: '操作失败，请重试',
-          icon: 'none',
-        })
-      } finally {
-        setTimeout(() => {
-          this.setData({
-            isBatchOperating: false,
-          })
-        }, 300)
-      }
-    },
-
-    /**
-     * 清除所有已完成的任务
-     */
-    handleClearCompleted() {
-      if (this.data.isCreating || this.data.isBatchOperating) {
-        return
-      }
-
-      // 如果没有已完成的任务，直接提示
-      if (this.data.stats.completed === 0) {
-        wx.showToast({
-          title: '暂无已完成的任务',
-          icon: 'none',
-        })
-        return
-      }
-
-      // 二次确认弹窗
-      wx.showModal({
-        title: '确认清除',
-        content: `确定要清除所有已完成的任务吗？共 ${this.data.stats.completed} 个`,
-        confirmColor: '#ef4444',
-        success: (res) => {
-          if (res.confirm) {
-            this.setData({
-              isBatchOperating: true,
-            })
-
-            try {
-              const deletedCount = repository.clearCompleted()
-
-              if (deletedCount > 0) {
-                wx.showToast({
-                  title: `已清除 ${deletedCount} 个已完成任务`,
-                  icon: 'success',
-                })
-              }
-
-              this.reloadTodos()
-            } catch (error) {
-              wx.showToast({
-                title: '操作失败，请重试',
-                icon: 'none',
-              })
-            } finally {
-              setTimeout(() => {
-                this.setData({
-                  isBatchOperating: false,
-                })
-              }, 300)
-            }
           }
         },
       })
