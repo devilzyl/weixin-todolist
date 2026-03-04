@@ -5,7 +5,6 @@
       class="action-btn edit-btn"
       catchtap="onEdit"
       data-id="{{todoId}}"
-      data-title="{{title}}"
     >
       <text class="action-text">编辑</text>
     </view>

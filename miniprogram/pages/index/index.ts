@@ -111,19 +111,16 @@ Component({
         return
       }
 
-      // 适配滑动卡片组件的事件结构，从 e.detail 获取参数
-      // 同时保留向后兼容：如果 e.detail 不存在，则从 e.currentTarget.dataset 获取
-      const { id, title } = e.detail || e.currentTarget.dataset || {}
+      // 从事件对象中获取任务 ID
+      const { id } = e.detail || e.currentTarget.dataset || {}
 
       if (!id) {
         return
       }
 
-      // 确保 title 不为 undefined，避免 encodeURIComponent 报错
-      const titleParam = title ? encodeURIComponent(title) : ''
-
+      // 只传递 ID，编辑页会从仓储读取完整数据
       wx.navigateTo({
-        url: `/pages/task-edit/index?id=${id}&title=${titleParam}`,
+        url: `/pages/task-edit/index?id=${id}`,
       })
     },
 

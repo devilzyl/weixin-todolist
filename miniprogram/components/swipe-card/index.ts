@@ -236,7 +236,6 @@ Component({
       this.resetPosition()
       this.triggerEvent('edit', {
         id: e.currentTarget.dataset.id,
-        title: e.currentTarget.dataset.title,
       })
     },
 
