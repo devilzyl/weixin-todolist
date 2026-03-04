@@ -216,6 +216,33 @@ Component({
     },
 
     /**
+     * 切换任务完成状态（从卡片分区点击触发）
+     * @param e - 事件对象
+     */
+    handleToggleFromCard(e: any) {
+      if (this.data.isBusy) return
+
+      const { id } = e.detail
+      if (!id) return
+
+      this.setData({ isBusy: true })
+
+      const result = repository.toggle(id)
+      if (result === null) {
+        wx.showToast({
+          title: '任务不存在',
+          icon: 'none',
+        })
+      }
+
+      this.reloadTodos()
+
+      setTimeout(() => {
+        this.setData({ isBusy: false })
+      }, 300)
+    },
+
+    /**
      * 删除任务
      * @param e - 事件对象
      */

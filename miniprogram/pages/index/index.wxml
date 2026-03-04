@@ -38,6 +38,7 @@
       bind:edit="navigateToEdit"
       bind:delete="handleDelete"
       bind:toggle-expand="toggleExpand"
+      bind:toggle="handleToggleFromCard"
     />
   </view>
 

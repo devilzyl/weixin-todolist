@@ -110,22 +110,57 @@ Component({
     },
 
     /**
-     * 内容区域点击事件
-     * 触发展开/收起
-     */
-    onContentTap() {
-      this.triggerEvent('toggle-expand', {
-        id: this.data.todoId,
-      })
-    },
-
-    /**
      * 优先级切换事件
      * 由 priority-dot 组件触发
      */
     handlePriority(e: any) {
       const { id } = e.detail
       this.triggerEvent('priority', { id })
+    },
+
+    /**
+     * 卡片点击事件处理
+     * 实现分区点击：左侧25%切换状态，中间展开/收起
+     */
+    onCardTap(e: any) {
+      // 如果正在滑动，不处理点击
+      if (this.data.isSwiping) {
+        return
+      }
+
+      // 如果已经左滑显示按钮，不处理点击
+      if (this.data.translateX < -6) {
+        this.resetPosition()
+        return
+      }
+
+      const touch = e.detail
+      if (!touch) {
+        return
+      }
+
+      // 获取卡片宽度
+      const query = this.createSelectorQuery()
+      query.select('.swipe-content').boundingClientRect()
+      query.exec((res: any) => {
+        if (!res || !res[0]) {
+          return
+        }
+
+        const cardWidth = res[0].width
+        // 计算点击位置相对于卡片左边缘的 X 坐标
+        const clickX = touch.x - res[0].left
+        const clickRatio = clickX / cardWidth
+
+        if (clickRatio < 0.25) {
+          // 左侧 25%：切换完成状态
+          this.triggerEvent('toggle', { id: this.data.todoId })
+        } else if (clickRatio < 0.85) {
+          // 中间 60%：展开/收起内容
+          this.triggerEvent('toggle-expand', { id: this.data.todoId })
+        }
+        // 右侧 15%：不处理，由按钮组件处理
+      })
     },
 
     /**

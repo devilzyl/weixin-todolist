@@ -25,6 +25,7 @@
     bindtouchmove="onTouchMove"
     bindtouchend="onTouchEnd"
     bindtouchcancel="onTouchEnd"
+    catchtap="onCardTap"
   >
     <!-- 任务标题行 -->
     <view class="todo-header">
@@ -40,8 +41,6 @@
     <view
       wx:if="{{content}}"
       class="todo-content {{isExpanded ? 'expanded' : ''}}"
-      bindtap="onContentTap"
-      data-todo-id="{{todoId}}"
     >
       <text class="content-text">
         {{isExpanded ? content : truncatedContent}}
