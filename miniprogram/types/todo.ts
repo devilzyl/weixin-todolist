@@ -11,8 +11,11 @@ export type TodoItem = {
   /** 任务唯一标识 */
   id: string
 
-  /** 任务标题（1-100字符） */
+  /** 任务标题（必填，最多50字） */
   title: string
+
+  /** 任务详细内容（可选，最多500字，默认空字符串） */
+  content: string
 
   /** 是否完成 */
   completed: boolean
