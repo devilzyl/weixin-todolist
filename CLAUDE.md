@@ -16,6 +16,42 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 > - ✅ 正确: `feat: 添加任务列表功能`
 > - ❌ 错误: `feat: Add task list feature`
 >
+> ### 🔄 Git 版本控制规范
+> **所有代码改动必须使用 Git 进行版本控制**，方便回溯和代码审查：
+>
+> **在修改代码前**：
+> - ✅ 必须先创建 Git 分支：`git checkout -b feature/功能名称`
+> - ✅ 明确修改目标和范围
+> - ✅ 确保当前工作区干净（无未提交的改动）
+>
+> **在修改代码后**：
+> - ✅ 必须提交改动：`git add . && git commit -m "类型: 描述改动"`
+> - ✅ 提交信息必须清晰说明改动内容
+> - ✅ 重大改动需要创建 Pull Request 进行代码审查
+>
+> **提交信息格式**：
+> - `feat:` - 新功能
+> - `fix:` - Bug 修复
+> - `refactor:` - 代码重构（不改变功能）
+> - `style:` - 代码格式调整（不影响逻辑）
+> - `docs:` - 文档更新
+> - `test:` - 测试相关
+> - `chore:` - 构建/工具链相关
+>
+> **示例**：
+> ```bash
+> # 创建分支
+> git checkout -b feature/添加优先级功能
+>
+> # 修改代码后提交
+> git add .
+> git commit -m "feat: 添加任务优先级设置功能"
+>
+> # 合并到主分支
+> git checkout main
+> git merge feature/添加优先级功能
+> ```
+>
 > **这是强制性规范，不可违反！**
 
 ---
@@ -173,5 +209,5 @@ wx.setStorageSync('todos', todos)
 
 ---
 
-**最后更新**: 2026-03-02
+**最后更新**: 2026-03-04
 **维护者**: Claude Sonnet 4.6

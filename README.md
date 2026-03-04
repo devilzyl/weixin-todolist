@@ -71,6 +71,24 @@ git clone https://github.com/devilzyl/weixin-todolist.git
    - 微信开发者工具会自动编译 TypeScript
    - 点击"编译"按钮即可预览
 
+## 🧪 测试
+
+自动化测试使用 **Minium**（微信官方测试框架）。
+
+### 运行测试
+
+```bash
+# 运行测试
+npm test
+
+# 生成测试报告
+npm run test:report
+```
+
+### 测试文档
+
+详细文档请查看 [test/README_TEST.md](test/README_TEST.md)
+
 ## 📄 许可证
 
 MIT License - 查看 [LICENSE](LICENSE) 文件了解详情

@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "test": "minium -p test/tests/index.test.py",
+    "test:report": "minium -p test/tests/index.test.py --report"
   },
   "keywords": [],
   "author": "",
   "license": "",
-  "dependencies": {
-  },
   "devDependencies": {
-    "miniprogram-api-typings": "^2.8.3-1"
+    "miniprogram-api-typings": "^2.8.3-1",
+    "minium": "^1.0.2"
   }
 }
