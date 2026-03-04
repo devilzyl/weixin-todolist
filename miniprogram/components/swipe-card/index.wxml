@@ -2,13 +2,6 @@
 <view class="swipe-area">
   <view class="action-buttons">
     <view
-      class="action-btn priority-btn"
-      catchtap="onPriority"
-      data-id="{{todoId}}"
-    >
-      <text class="action-text">优先级</text>
-    </view>
-    <view
       class="action-btn edit-btn"
       catchtap="onEdit"
       data-id="{{todoId}}"
@@ -33,6 +26,32 @@
     bindtouchend="onTouchEnd"
     bindtouchcancel="onTouchEnd"
   >
-    <slot></slot>
+    <!-- 任务标题行 -->
+    <view class="todo-header">
+      <priority-dot
+        todo-id="{{todoId}}"
+        priority="{{priority}}"
+        bind:cycle="handlePriority"
+      />
+      <text class="todo-title">{{title}}</text>
+    </view>
+
+    <!-- 任务内容行 -->
+    <view
+      wx:if="{{content}}"
+      class="todo-content {{isExpanded ? 'expanded' : ''}}"
+      bindtap="onContentTap"
+      data-todo-id="{{todoId}}"
+    >
+      <text class="content-text">
+        {{isExpanded ? content : truncatedContent}}
+      </text>
+      <text
+        wx:if="{{showExpandHint}}"
+        class="expand-hint"
+      >
+        {{isExpanded ? '...收起' : '...展开'}}
+      </text>
+    </view>
   </view>
 </view>

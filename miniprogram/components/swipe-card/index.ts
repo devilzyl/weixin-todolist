@@ -2,7 +2,7 @@
  * 滑动卡片组件
  *
  * 支持左滑显示操作按钮
- * 提供优先级切换、编辑、删除功能
+ * 提供任务展示（标题+内容）、优先级切换、编辑、删除功能
  */
 
 Component({
@@ -17,6 +17,21 @@ Component({
     title: {
       type: String,
       value: '',
+    },
+    /** 任务内容 */
+    content: {
+      type: String,
+      value: '',
+    },
+    /** 任务优先级 */
+    priority: {
+      type: String,
+      value: 'low',
+    },
+    /** 是否展开 */
+    isExpanded: {
+      type: Boolean,
+      value: false,
     },
   },
 
@@ -34,6 +49,35 @@ Component({
     touchStartY: 0,
     /** 触摸开始时的偏移量 */
     startTranslateX: 0,
+    /** 截断后的内容 */
+    truncatedContent: '',
+    /** 是否显示展开提示 */
+    showExpandHint: false,
+  },
+
+  lifetimes: {
+    /**
+     * 组件挂载时，按当前设备宽度将 rpx 换算为 px
+     * 2 个按钮 * 120rpx = 240rpx
+     */
+    attached() {
+      const windowInfo = wx.getWindowInfo()
+      const buttonWidth = (240 * windowInfo.windowWidth) / 750 // 只剩编辑和删除按钮
+      this.setData({ buttonWidth })
+      this.updateContentDisplay()
+    },
+  },
+
+  observers: {
+    'content': function () {
+      this.updateContentDisplay()
+    },
+    'isExpanded': function () {
+      // 当展开状态改变时，通知父组件更新全局展开状态
+      if (this.data.isExpanded) {
+        this.triggerEvent('expand', { id: this.data.todoId })
+      }
+    },
   },
 
   lifetimes: {
@@ -50,6 +94,40 @@ Component({
 
   /** 组件方法 */
   methods: {
+    /**
+     * 更新内容显示
+     * 根据内容长度和展开状态计算显示文本
+     */
+    updateContentDisplay() {
+      const content = this.data.content || ''
+      const maxLength = 50 // 约2行文字
+      const shouldTruncate = content.length > maxLength && !this.data.isExpanded
+
+      this.setData({
+        truncatedContent: shouldTruncate ? content.substring(0, maxLength) : content,
+        showExpandHint: content.length > maxLength,
+      })
+    },
+
+    /**
+     * 内容区域点击事件
+     * 触发展开/收起
+     */
+    onContentTap() {
+      this.triggerEvent('toggle-expand', {
+        id: this.data.todoId,
+      })
+    },
+
+    /**
+     * 优先级切换事件
+     * 由 priority-dot 组件触发
+     */
+    handlePriority(e: any) {
+      const { id } = e.detail
+      this.triggerEvent('priority', { id })
+    },
+
     /**
      * 触摸开始
      */
@@ -114,14 +192,6 @@ Component({
       setTimeout(() => {
         this.setData({ isSwiping: false })
       }, 100)
-    },
-
-    /**
-     * 优先级按钮点击
-     */
-    onPriority(e: any) {
-      this.resetPosition()
-      this.triggerEvent('priority', { id: e.currentTarget.dataset.id })
     },
 
     /**
