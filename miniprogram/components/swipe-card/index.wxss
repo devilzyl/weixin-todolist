@@ -24,17 +24,40 @@
   display: flex;
   align-items: center;
   margin-bottom: 16rpx;
+  gap: 12rpx;
+}
+
+/* 完成状态图标 */
+.todo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40rpx;
+  height: 40rpx;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.icon-text {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #666;
 }
 
 .todo-title {
+  flex: 1;
   font-size: 32rpx;
   font-weight: bold;
   color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* 任务内容行 */
 .todo-content {
   margin-bottom: 16rpx;
+  margin-left: 52rpx;
   line-height: 1.5;
   cursor: pointer;
 }

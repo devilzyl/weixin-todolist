@@ -249,7 +249,8 @@ Component({
         return
       }
 
-      const { id } = e.currentTarget.dataset
+      // 从事件对象中获取任务 ID
+      const { id } = e.detail || e.currentTarget.dataset || {}
       if (!id) {
         return
       }

@@ -28,6 +28,11 @@ Component({
       type: String,
       value: 'low',
     },
+    /** 是否完成 */
+    completed: {
+      type: Boolean,
+      value: false,
+    },
     /** 是否展开 */
     isExpanded: {
       type: Boolean,
@@ -119,8 +124,16 @@ Component({
     },
 
     /**
+     * 图标点击事件
+     * 切换任务完成状态
+     */
+    onIconTap() {
+      this.triggerEvent('toggle', { id: this.data.todoId })
+    },
+
+    /**
      * 卡片点击事件处理
-     * 实现分区点击：左侧25%切换状态，中间展开/收起
+     * 只处理展开/收起，不再处理状态切换（状态切换由图标处理）
      */
     onCardTap(e: any) {
       // 如果正在滑动，不处理点击
@@ -134,33 +147,8 @@ Component({
         return
       }
 
-      const touch = e.detail
-      if (!touch) {
-        return
-      }
-
-      // 获取卡片宽度
-      const query = this.createSelectorQuery()
-      query.select('.swipe-content').boundingClientRect()
-      query.exec((res: any) => {
-        if (!res || !res[0]) {
-          return
-        }
-
-        const cardWidth = res[0].width
-        // 计算点击位置相对于卡片左边缘的 X 坐标
-        const clickX = touch.x - res[0].left
-        const clickRatio = clickX / cardWidth
-
-        if (clickRatio < 0.25) {
-          // 左侧 25%：切换完成状态
-          this.triggerEvent('toggle', { id: this.data.todoId })
-        } else if (clickRatio < 0.85) {
-          // 中间 60%：展开/收起内容
-          this.triggerEvent('toggle-expand', { id: this.data.todoId })
-        }
-        // 右侧 15%：不处理，由按钮组件处理
-      })
+      // 直接触发展开/收起
+      this.triggerEvent('toggle-expand', { id: this.data.todoId })
     },
 
     /**

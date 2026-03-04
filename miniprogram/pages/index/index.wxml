@@ -33,6 +33,7 @@
       title="{{item.title}}"
       content="{{item.content}}"
       priority="{{item.priority}}"
+      completed="{{item.completed}}"
       isExpanded="{{expandedId === item.id}}"
       bind:priority="handlePriority"
       bind:edit="navigateToEdit"

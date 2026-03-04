@@ -212,7 +212,7 @@ export class LocalTodoRepository implements TodoRepository {
 
   /**
    * 切换任务优先级
-   * 循环顺序：high -> medium -> low -> high
+   * 循环顺序：low -> medium -> high -> low
    * @param id - 任务 ID
    * @returns 更新后的任务，不存在时返回 null
    */
@@ -224,8 +224,8 @@ export class LocalTodoRepository implements TodoRepository {
       return null
     }
 
-    // 优先级循环：high -> medium -> low -> high
-    const priorityOrder: TodoPriority[] = ['high', 'medium', 'low']
+    // 优先级循环：low -> medium -> high -> low
+    const priorityOrder: TodoPriority[] = ['low', 'medium', 'high']
     const currentIndex = priorityOrder.indexOf(todo.priority)
     const nextIndex = (currentIndex + 1) % priorityOrder.length
     const nextPriority = priorityOrder[nextIndex]
