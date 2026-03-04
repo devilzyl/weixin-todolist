@@ -27,16 +27,17 @@ export class LocalTodoRepository implements TodoRepository {
 
   /**
    * 创建新任务
-   * @param input - 包含任务标题的输入对象
+   * @param input - 包含任务标题和内容的输入对象
    * @returns 新创建的任务对象
    */
-  create(input: { title: string }): TodoItem {
+  create(input: { title: string; content?: string; priority?: TodoPriority }): TodoItem {
     const now = Date.now()
     const newTodo: TodoItem = {
       id: this._generateId(),
       title: input.title,
+      content: input.content?.trim() || '',
       completed: false,
-      priority: DEFAULT_PRIORITY,
+      priority: input.priority || DEFAULT_PRIORITY,
       createdAt: now,
       updatedAt: now,
     }
@@ -100,11 +101,16 @@ export class LocalTodoRepository implements TodoRepository {
   }
 
   /**
-   * 更新任务标题
-   * @param input - 包含任务 ID 和新标题的输入对象
+   * 更新任务
+   * @param input - 包含任务 ID 和可选更新字段的输入对象
    * @returns 更新后的任务，不存在时返回 null
    */
-  updateTitle(input: { id: string; title: string }): TodoItem | null {
+  update(input: {
+    id: string
+    title?: string
+    content?: string
+    priority?: TodoPriority
+  }): TodoItem | null {
     const todos = this.list()
     const todo = todos.find((t) => t.id === input.id)
 
@@ -115,10 +121,24 @@ export class LocalTodoRepository implements TodoRepository {
     // 创建新数组避免直接修改 list() 返回的引用
     const newTodos = todos.map((t) => {
       if (t.id === input.id) {
+        const updates: Partial<TodoItem> = {
+          updatedAt: Date.now(),
+        }
+
+        // 只更新提供的字段
+        if (input.title !== undefined) {
+          updates.title = input.title
+        }
+        if (input.content !== undefined) {
+          updates.content = input.content
+        }
+        if (input.priority !== undefined) {
+          updates.priority = input.priority
+        }
+
         return {
           ...t,
-          title: input.title,
-          updatedAt: Date.now(),
+          ...updates,
         }
       }
       return t
@@ -127,6 +147,16 @@ export class LocalTodoRepository implements TodoRepository {
     this._saveToStorage(newTodos)
 
     return newTodos.find((t) => t.id === input.id)!
+  }
+
+  /**
+   * 更新任务标题（保留向后兼容）
+   * @param input - 包含任务 ID 和新标题的输入对象
+   * @returns 更新后的任务，不存在时返回 null
+   * @deprecated 使用 update 方法替代
+   */
+  updateTitle(input: { id: string; title: string }): TodoItem | null {
+    return this.update({ id: input.id, title: input.title })
   }
 
   /**
@@ -290,15 +320,22 @@ export class LocalTodoRepository implements TodoRepository {
 
   /**
    * 修复单个任务项
-   * 为旧数据添加默认优先级
+   * 为旧数据添加默认优先级和内容字段
    * @param item - 任务项
    * @returns 修复后的任务项
    * @private
    */
   private _healItem(item: TodoItem): TodoItem {
-    // 为旧数据添加默认优先级
-    if (!item.priority) {
-      return { ...item, priority: DEFAULT_PRIORITY }
+    // 为旧数据添加默认优先级和内容字段
+    const needsPriority = !item.priority
+    const needsContent = !('content' in item)
+
+    if (needsPriority || needsContent) {
+      return {
+        ...item,
+        priority: item.priority || DEFAULT_PRIORITY,
+        content: item.content || '',
+      }
     }
     return item
   }
