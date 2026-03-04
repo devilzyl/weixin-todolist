@@ -29,6 +29,9 @@ Component({
 
     /** 高亮任务 ID（新增反馈） */
     highlightTodoId: '',
+
+    /** 当前展开的任务 ID */
+    expandedId: '' as string,
   },
 
   /** 组件生命周期 */
@@ -192,6 +195,24 @@ Component({
       setTimeout(() => {
         this.setData({ isBusy: false })
       }, 300)
+    },
+
+    /**
+     * 切换任务展开状态
+     * @param e - 事件对象
+     */
+    toggleExpand(e: any) {
+      const { id } = e.detail
+      if (!id) return
+
+      const newExpandedId = this.data.expandedId === id ? '' : id
+
+      // 先关闭其他卡片，再展开当前卡片
+      this.setData({ expandedId: '' }, () => {
+        if (newExpandedId) {
+          this.setData({ expandedId: newExpandedId })
+        }
+      })
     },
 
     /**
