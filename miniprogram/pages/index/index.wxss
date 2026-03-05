@@ -39,6 +39,8 @@
 
 /* 容器 */
 .container {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   max-width: 780rpx;
   position: relative;
@@ -47,6 +49,8 @@
 
 /* 毛玻璃卡片效果 */
 .glass-card {
+  width: 100%;
+  box-sizing: border-box;
   background: rgba(255, 255, 255, 0.65);
   backdrop-filter: blur(40rpx);
   -webkit-backdrop-filter: blur(40rpx);
@@ -70,6 +74,8 @@
 }
 
 .page.dark .glass-card {
+  width: 100%;
+  box-sizing: border-box;
   background: rgba(30, 30, 50, 0.7);
   border-color: rgba(255, 255, 255, 0.15);
   box-shadow: 0 16rpx 64rpx rgba(0, 0, 0, 0.3), inset 0 1rpx 0 rgba(255, 255, 255, 0.08);
