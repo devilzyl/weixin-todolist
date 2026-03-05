@@ -32,6 +32,15 @@ Component({
 
     /** 当前展开的任务 ID */
     expandedId: '' as string,
+
+    /** 当前筛选条件 */
+    filterPriority: 'all',
+
+    /** 当前排序方式 */
+    sortBy: 'createdAt_desc',
+
+    /** 经过筛选和排序后的显示列表 */
+    filteredTodos: [] as TodoItem[],
   },
 
   /** 组件生命周期 */
@@ -286,6 +295,28 @@ Component({
           }
         },
       })
+    },
+
+    /**
+     * 处理筛选器变化
+     * @param e - 事件对象
+     */
+    handleFilterChange(e: WechatMiniprogram.CustomEvent) {
+      const { value } = e.detail
+      this.setData({ filterPriority: value })
+      this.saveFilterPreference(value)
+      this.filterAndSortTodos()
+    },
+
+    /**
+     * 处理排序器变化
+     * @param e - 事件对象
+     */
+    handleSortChange(e: WechatMiniprogram.CustomEvent) {
+      const { value } = e.detail
+      this.setData({ sortBy: value })
+      this.saveSortPreference(value)
+      this.filterAndSortTodos()
     },
   },
 })
