@@ -1,406 +1,209 @@
 /**
- * TodoList 列表页 - 极简版
+ * TodoList 首页 - Apple 风格
  *
- * 展示任务列表
- * 支持任务完成状态切换、编辑和删除
+ * 单页极简模式，所有操作在首页完成
  */
 
 import { LocalTodoRepository } from '../../utils/todo-repository'
-import type { TodoItem } from '../../types/todo'
-import { PRIORITY_CONFIG } from '../../types/todo'
+import { getTheme, toggleTheme as toggleThemeUtil } from '../../utils/theme'
+import type { TodoItem, TodoPriority, TodoCategory } from '../../types/todo'
 
 /** 仓储实例 */
 const repository = new LocalTodoRepository()
 
-/** 优先级权重映射 */
-const PRIORITY_ORDER = {
-  high: 3,
-  medium: 2,
-  low: 1,
-} as const
-
 Component({
   /** 页面数据 */
   data: {
+    /** 当前主题 */
+    theme: 'light' as 'light' | 'dark',
     /** 任务列表 */
     todos: [] as TodoItem[],
-
+    /** 已完成任务数 */
+    completedCount: 0,
     /** 待完成任务数 */
     pendingCount: 0,
-
-    /** 高优先级任务数 */
-    highPriorityCount: 0,
-
-    /** 操作锁（防止快速连点） */
-    isBusy: false,
-
-    /** 高亮任务 ID（新增反馈） */
-    highlightTodoId: '',
-
-    /** 当前展开的任务 ID */
-    expandedId: '' as string,
-
-    /** 当前筛选条件 */
-    filterPriority: 'all',
-
-    /** 当前排序方式 */
-    sortBy: 'createdAt_desc',
-
-    /** 经过筛选和排序后的显示列表 */
-    filteredTodos: [] as TodoItem[],
+    /** 格式化日期 */
+    formattedDate: '',
+    /** 是否显示底部面板 */
+    showSheet: false,
+    /** 面板标题 */
+    sheetTitle: '',
+    /** 当前编辑的任务 */
+    editingTodo: null as TodoItem | null,
+    /** 分类标签映射 */
+    categoryLabels: {
+      work: '工作',
+      personal: '个人',
+      default: '默认',
+    } as Record<TodoCategory, string>,
   },
 
   /** 组件生命周期 */
   lifetimes: {
-    /**
-     * 组件挂载时加载任务
-     */
     attached() {
-      this.loadPreferences()
-      this.reloadTodos()
-    },
-  },
-
-  /** 页面生命周期 */
-  pageLifetimes: {
-    /**
-     * 页面显示时刷新任务列表
-     * 从新增页返回时会触发
-     */
-    show() {
-      this.reloadTodos()
-      // 重置所有滑动卡片
-      const swipeCards = this.selectAllComponents('.swipe-card')
-      swipeCards.forEach((card: any) => {
-        card.resetPosition && card.resetPosition()
-      })
+      // 加载主题设置
+      this.setData({ theme: getTheme() })
+      // 加载任务列表
+      this.loadTodos()
+      // 设置日期
+      this.setDate()
     },
   },
 
   /** 页面方法 */
   methods: {
     /**
-     * 重新加载任务列表
-     * 从仓储读取数据并更新页面状态
+     * 加载任务列表
      */
-    reloadTodos() {
+    loadTodos() {
       const todos = repository.list()
-
-      // 确保 todos 是一个有效的数组
-      const validTodos = Array.isArray(todos) ? todos : []
-
-      // 计算待完成任务数
-      const pendingCount = validTodos.filter(
-        (t) => t && typeof t.completed === 'boolean' && !t.completed
-      ).length
-
-      // 计算高优先级任务数
-      const highPriorityCount = validTodos.filter(
-        (t) => t && !t.completed && t.priority === 'high'
-      ).length
-
       this.setData({
-        todos: validTodos,
-        pendingCount,
-        highPriorityCount,
-      })
-
-      // 应用筛选和排序
-      this.filterAndSortTodos()
-    },
-
-    /**
-     * 根据当前筛选和排序条件处理任务列表
-     */
-    filterAndSortTodos() {
-      let result = [...this.data.todos]
-
-      // 1. 筛选
-      if (this.data.filterPriority !== 'all') {
-        result = result.filter((todo: TodoItem) => todo.priority === this.data.filterPriority)
-      }
-
-      // 2. 排序
-      switch (this.data.sortBy) {
-        case 'createdAt_desc':
-          result.sort((a: TodoItem, b: TodoItem) => b.createdAt - a.createdAt)
-          break
-        case 'createdAt_asc':
-          result.sort((a: TodoItem, b: TodoItem) => a.createdAt - b.createdAt)
-          break
-        case 'priority_desc':
-          result.sort((a: TodoItem, b: TodoItem) => PRIORITY_ORDER[b.priority] - PRIORITY_ORDER[a.priority])
-          break
-        case 'priority_asc':
-          result.sort((a: TodoItem, b: TodoItem) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority])
-          break
-        default:
-          // 未知排序方式，保持原顺序
-          console.warn(`未知的排序方式: ${this.data.sortBy}`)
-          break
-      }
-
-      // 3. 按完成状态分组，未完成在前，已完成在后
-      const pendingTodos = result.filter((todo: TodoItem) => !todo.completed)
-      const completedTodos = result.filter((todo: TodoItem) => todo.completed)
-      result = [...pendingTodos, ...completedTodos]
-
-      // 4. 更新显示列表
-      this.setData({ filteredTodos: result })
-    },
-
-    /**
-     * 跳转到新增任务页面
-     */
-    navigateToCreate() {
-      if (this.data.isBusy) {
-        return
-      }
-
-      wx.navigateTo({
-        url: '/pages/task-form/index',
+        todos,
+        completedCount: todos.filter((t) => t.completed).length,
+        pendingCount: todos.filter((t) => !t.completed).length,
       })
     },
 
     /**
-     * 跳转到任务编辑页面
-     * @param e - 事件对象
+     * 设置日期显示
      */
-    navigateToEdit(e: any) {
-      if (this.data.isBusy) {
-        return
-      }
+    setDate() {
+      const now = new Date()
+      const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+      const formatted = `${weekdays[now.getDay()]} · ${now.getMonth() + 1}月${now.getDate()}日`
+      this.setData({ formattedDate: formatted })
+    },
 
-      // 从事件对象中获取任务 ID
-      const { id } = e.detail || e.currentTarget.dataset || {}
-
-      if (!id) {
-        return
-      }
-
-      // 只传递 ID，编辑页会从仓储读取完整数据
-      wx.navigateTo({
-        url: `/pages/task-edit/index?id=${id}`,
-      })
+    /**
+     * 切换主题
+     */
+    toggleTheme() {
+      const newTheme = toggleThemeUtil()
+      this.setData({ theme: newTheme })
     },
 
     /**
      * 切换任务完成状态
-     * @param e - 事件对象
      */
-    handleToggle(e: any) {
-      // 操作锁检查
-      if (this.data.isBusy) {
-        return
-      }
-
+    onToggle(e: WechatMiniprogram.TouchEventTap) {
       const { id } = e.currentTarget.dataset
-      if (!id) {
-        return
-      }
-
-      // 设置操作锁
-      this.setData({
-        isBusy: true,
-      })
-
-      // 切换状态
-      const result = repository.toggle(id)
-      if (result === null) {
-        wx.showToast({
-          title: '任务不存在',
-          icon: 'none',
-        })
-      }
-
-      // 刷新列表
-      this.reloadTodos()
-
-      // 延迟释放操作锁，防止快速连点
-      setTimeout(() => {
-        this.setData({
-          isBusy: false,
-        })
-      }, 300)
-    },
-
-    /**
-     * 切换任务优先级
-     * @param e - 事件对象
-     */
-    handlePriority(e: any) {
-      if (this.data.isBusy) return
-
-      const { id } = e.detail
       if (!id) return
 
-      this.setData({ isBusy: true })
-
-      const result = repository.cyclePriority(id)
-      if (result) {
-        // 显示提示
-        const priorityLabel = PRIORITY_CONFIG[result.priority].label
-        wx.showToast({
-          title: `优先级：${priorityLabel}`,
-          icon: 'none',
-          duration: 1000,
-        })
-      }
-
-      this.reloadTodos()
-
-      setTimeout(() => {
-        this.setData({ isBusy: false })
-      }, 300)
+      repository.toggle(id)
+      this.loadTodos()
     },
 
     /**
-     * 切换任务展开状态
-     * @param e - 事件对象
+     * 长按任务项，显示操作菜单
      */
-    toggleExpand(e: any) {
-      const { id } = e.detail
+    onLongPress(e: WechatMiniprogram.TouchEventTap) {
+      const { id } = e.currentTarget.dataset
       if (!id) return
 
-      const newExpandedId = this.data.expandedId === id ? '' : id
-
-      // 先关闭其他卡片，再展开当前卡片
-      this.setData({ expandedId: '' }, () => {
-        if (newExpandedId) {
-          this.setData({ expandedId: newExpandedId })
-        }
-      })
-    },
-
-    /**
-     * 切换任务完成状态（从卡片分区点击触发）
-     * @param e - 事件对象
-     */
-    handleToggleFromCard(e: any) {
-      if (this.data.isBusy) return
-
-      const { id } = e.detail
-      if (!id) return
-
-      this.setData({ isBusy: true })
-
-      const result = repository.toggle(id)
-      if (result === null) {
-        wx.showToast({
-          title: '任务不存在',
-          icon: 'none',
-        })
-      }
-
-      this.reloadTodos()
-
-      setTimeout(() => {
-        this.setData({ isBusy: false })
-      }, 300)
-    },
-
-    /**
-     * 删除任务
-     * @param e - 事件对象
-     */
-    handleDelete(e: any) {
-      // 操作锁检查
-      if (this.data.isBusy) {
-        return
-      }
-
-      // 从事件对象中获取任务 ID
-      const { id } = e.detail || e.currentTarget.dataset || {}
-      if (!id) {
-        return
-      }
-
-      // 二次确认弹窗
-      wx.showModal({
-        title: '确认删除',
-        content: '删除后无法恢复，确定要删除这个任务吗？',
+      // 显示操作菜单
+      wx.showActionSheet({
+        itemList: ['编辑', '删除'],
         success: (res) => {
-          if (res.confirm) {
-            // 用户确认删除
-            this.setData({
-              isBusy: true,
-            })
-
-            const success = repository.remove(id)
-            if (!success) {
-              wx.showToast({
-                title: '任务不存在',
-                icon: 'none',
-              })
-            }
-
-            // 刷新列表（内部已调用 filterAndSortTodos）
-            this.reloadTodos()
-
-            // 释放操作锁
-            setTimeout(() => {
-              this.setData({
-                isBusy: false,
-              })
-            }, 300)
+          if (res.tapIndex === 0) {
+            // 编辑
+            this.onEdit(id)
+          } else if (res.tapIndex === 1) {
+            // 删除
+            this.onDelete(id)
           }
         },
       })
     },
 
     /**
-     * 处理筛选器变化
-     * @param e - 事件对象
+     * 显示添加任务面板
      */
-    handleFilterChange(e: WechatMiniprogram.CustomEvent) {
-      const { value } = e.detail
-      this.setData({ filterPriority: value })
-      this.saveFilterPreference(value)
-      this.filterAndSortTodos()
+    onAddTask() {
+      this.setData({
+        sheetTitle: '添加任务',
+        editingTodo: null,
+        showSheet: true,
+      })
     },
 
     /**
-     * 处理排序器变化
-     * @param e - 事件对象
+     * 编辑任务
      */
-    handleSortChange(e: WechatMiniprogram.CustomEvent) {
-      const { value } = e.detail
-      this.setData({ sortBy: value })
-      this.saveSortPreference(value)
-      this.filterAndSortTodos()
-    },
-
-    /**
-     * 保存筛选偏好到本地存储
-     * @param value - 筛选条件值
-     */
-    saveFilterPreference(value: string) {
-      try {
-        wx.setStorageSync('filterPriority', value)
-      } catch (error) {
-        console.error('保存筛选偏好失败', error)
+    onEdit(todoId: string) {
+      const todo = this.data.todos.find((t) => t.id === todoId)
+      if (todo) {
+        this.setData({
+          sheetTitle: '编辑任务',
+          editingTodo: todo,
+          showSheet: true,
+        })
       }
     },
 
     /**
-     * 保存排序偏好到本地存储
-     * @param value - 排序方式值
+     * 删除任务
      */
-    saveSortPreference(value: string) {
-      try {
-        wx.setStorageSync('sortBy', value)
-      } catch (error) {
-        console.error('保存排序偏好失败', error)
-      }
+    onDelete(todoId: string) {
+      wx.showModal({
+        title: '确认删除',
+        content: '删除后无法恢复，确定要删除这个任务吗？',
+        success: (res) => {
+          if (res.confirm) {
+            repository.remove(todoId)
+            this.loadTodos()
+            wx.showToast({
+              title: '已删除',
+              icon: 'success',
+            })
+          }
+        },
+      })
     },
 
     /**
-     * 加载用户偏好设置
+     * 保存任务（从表单组件触发）
      */
-    loadPreferences() {
-      const filterPriority = wx.getStorageSync('filterPriority') || 'all'
-      const sortBy = wx.getStorageSync('sortBy') || 'createdAt_desc'
-      this.setData({ filterPriority, sortBy })
+    onSaveTask(e: WechatMiniprogram.CustomEvent) {
+      const { title, content, priority, category } = e.detail as {
+        title: string
+        content: string
+        priority: TodoPriority
+        category: TodoCategory
+      }
+
+      if (this.data.editingTodo) {
+        // 编辑模式
+        repository.update({
+          id: this.data.editingTodo.id,
+          title,
+          content,
+          priority,
+          category,
+        })
+      } else {
+        // 新增模式
+        repository.create({
+          title,
+          content,
+          priority,
+          category,
+        })
+      }
+
+      this.setData({ showSheet: false })
+      this.loadTodos()
+
+      wx.showToast({
+        title: this.data.editingTodo ? '已更新' : '已添加',
+        icon: 'success',
+      })
+    },
+
+    /**
+     * 关闭底部面板
+     */
+    onSheetClose() {
+      this.setData({ showSheet: false })
     },
   },
 })
