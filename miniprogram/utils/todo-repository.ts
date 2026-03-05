@@ -5,11 +5,11 @@
  * 包含存储自愈、排序、ID 生成等核心逻辑
  */
 
-import type { TodoItem, TodoRepository, TodoPriority } from '../types/todo'
-import { DEFAULT_PRIORITY } from '../types/todo'
+import type { TodoItem, TodoRepository, TodoPriority, TodoCategory } from '../types/todo'
+import { DEFAULT_PRIORITY, DEFAULT_CATEGORY } from '../types/todo'
 
 /** 本地存储键名 */
-const STORAGE_KEY = 'todos:v1'
+const STORAGE_KEY = 'todos:v2'
 
 /**
  * 本地 Todo 仓储实现
@@ -30,7 +30,12 @@ export class LocalTodoRepository implements TodoRepository {
    * @param input - 包含任务标题和内容的输入对象
    * @returns 新创建的任务对象
    */
-  create(input: { title: string; content?: string; priority?: TodoPriority }): TodoItem {
+  create(input: {
+    title: string
+    content?: string
+    priority?: TodoPriority
+    category?: TodoCategory
+  }): TodoItem {
     const now = Date.now()
     const newTodo: TodoItem = {
       id: this._generateId(),
@@ -38,6 +43,7 @@ export class LocalTodoRepository implements TodoRepository {
       content: input.content?.trim() || '',
       completed: false,
       priority: input.priority || DEFAULT_PRIORITY,
+      category: input.category || DEFAULT_CATEGORY,
       createdAt: now,
       updatedAt: now,
     }
@@ -110,6 +116,7 @@ export class LocalTodoRepository implements TodoRepository {
     title?: string
     content?: string
     priority?: TodoPriority
+    category?: TodoCategory
   }): TodoItem | null {
     const todos = this.list()
     const todo = todos.find((t) => t.id === input.id)
@@ -134,6 +141,9 @@ export class LocalTodoRepository implements TodoRepository {
         }
         if (input.priority !== undefined) {
           updates.priority = input.priority
+        }
+        if (input.category !== undefined) {
+          updates.category = input.category
         }
 
         return {
@@ -320,21 +330,23 @@ export class LocalTodoRepository implements TodoRepository {
 
   /**
    * 修复单个任务项
-   * 为旧数据添加默认优先级和内容字段
+   * 为旧数据添加默认优先级、内容和分类字段
    * @param item - 任务项
    * @returns 修复后的任务项
    * @private
    */
   private _healItem(item: TodoItem): TodoItem {
-    // 为旧数据添加默认优先级和内容字段
+    // 为旧数据添加默认优先级、内容和分类字段
     const needsPriority = !item.priority
     const needsContent = !('content' in item)
+    const needsCategory = !('category' in item)
 
-    if (needsPriority || needsContent) {
+    if (needsPriority || needsContent || needsCategory) {
       return {
         ...item,
         priority: item.priority || DEFAULT_PRIORITY,
         content: item.content || '',
+        category: item.category || DEFAULT_CATEGORY,
       }
     }
     return item
