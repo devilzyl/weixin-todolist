@@ -36,6 +36,8 @@ Component({
       personal: '个人',
       default: '默认',
     } as Record<TodoCategory, string>,
+    /** 操作锁，防止重复提交 */
+    isBusy: false,
   },
 
   /** 组件生命周期 */
@@ -56,12 +58,17 @@ Component({
      * 加载任务列表
      */
     loadTodos() {
-      const todos = repository.list()
-      this.setData({
-        todos,
-        completedCount: todos.filter((t) => t.completed).length,
-        pendingCount: todos.filter((t) => !t.completed).length,
-      })
+      try {
+        const todos = repository.list()
+        this.setData({
+          todos,
+          completedCount: todos.filter((t) => t.completed).length,
+          pendingCount: todos.filter((t) => !t.completed).length,
+        })
+      } catch (error) {
+        console.error('加载任务失败:', error)
+        wx.showToast({ title: '加载失败', icon: 'none' })
+      }
     },
 
     /**
@@ -86,17 +93,29 @@ Component({
      * 切换任务完成状态
      */
     onToggle(e: WechatMiniprogram.TouchEventTap) {
+      if (this.data.isBusy) return
+
       const { id } = e.currentTarget.dataset
       if (!id) return
 
-      repository.toggle(id)
-      this.loadTodos()
+      this.setData({ isBusy: true })
+
+      try {
+        repository.toggle(id)
+        this.loadTodos()
+      } catch (error) {
+        wx.showToast({ title: '操作失败', icon: 'none' })
+      } finally {
+        setTimeout(() => this.setData({ isBusy: false }), 300)
+      }
     },
 
     /**
      * 长按任务项，显示操作菜单
      */
     onLongPress(e: WechatMiniprogram.TouchEventTap) {
+      if (this.data.isBusy) return
+
       const { id } = e.currentTarget.dataset
       if (!id) return
 
@@ -119,6 +138,8 @@ Component({
      * 显示添加任务面板
      */
     onAddTask() {
+      if (this.data.isBusy) return
+
       this.setData({
         sheetTitle: '添加任务',
         editingTodo: null,
@@ -144,18 +165,30 @@ Component({
      * 删除任务
      */
     onDelete(todoId: string) {
+      if (this.data.isBusy) return
+
+      this.setData({ isBusy: true })
+
       wx.showModal({
         title: '确认删除',
         content: '删除后无法恢复，确定要删除这个任务吗？',
         success: (res) => {
           if (res.confirm) {
-            repository.remove(todoId)
-            this.loadTodos()
-            wx.showToast({
-              title: '已删除',
-              icon: 'success',
-            })
+            try {
+              repository.remove(todoId)
+              this.loadTodos()
+              wx.showToast({
+                title: '已删除',
+                icon: 'success',
+              })
+            } catch (error) {
+              wx.showToast({ title: '删除失败', icon: 'none' })
+            }
           }
+          this.setData({ isBusy: false })
+        },
+        fail: () => {
+          this.setData({ isBusy: false })
         },
       })
     },
@@ -164,6 +197,10 @@ Component({
      * 保存任务（从表单组件触发）
      */
     onSaveTask(e: WechatMiniprogram.CustomEvent) {
+      if (this.data.isBusy) return
+
+      this.setData({ isBusy: true })
+
       const { title, content, priority, category } = e.detail as {
         title: string
         content: string
@@ -171,32 +208,38 @@ Component({
         category: TodoCategory
       }
 
-      if (this.data.editingTodo) {
-        // 编辑模式
-        repository.update({
-          id: this.data.editingTodo.id,
-          title,
-          content,
-          priority,
-          category,
+      try {
+        if (this.data.editingTodo) {
+          // 编辑模式
+          repository.update({
+            id: this.data.editingTodo.id,
+            title,
+            content,
+            priority,
+            category,
+          })
+        } else {
+          // 新增模式
+          repository.create({
+            title,
+            content,
+            priority,
+            category,
+          })
+        }
+
+        this.setData({ showSheet: false })
+        this.loadTodos()
+
+        wx.showToast({
+          title: this.data.editingTodo ? '已更新' : '已添加',
+          icon: 'success',
         })
-      } else {
-        // 新增模式
-        repository.create({
-          title,
-          content,
-          priority,
-          category,
-        })
+      } catch (error) {
+        wx.showToast({ title: '保存失败', icon: 'none' })
+      } finally {
+        setTimeout(() => this.setData({ isBusy: false }), 300)
       }
-
-      this.setData({ showSheet: false })
-      this.loadTodos()
-
-      wx.showToast({
-        title: this.data.editingTodo ? '已更新' : '已添加',
-        icon: 'success',
-      })
     },
 
     /**

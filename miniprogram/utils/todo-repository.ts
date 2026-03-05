@@ -12,6 +12,32 @@ import { DEFAULT_PRIORITY, DEFAULT_CATEGORY } from '../types/todo'
 const STORAGE_KEY = 'todos:v2'
 
 /**
+ * 清理输入字符串
+ * - 移除 HTML/JS 标签
+ * - 移除控制字符
+ * - 限制长度
+ */
+function sanitizeInput(input: string, maxLength: number = 50): string {
+  if (!input || typeof input !== 'string') return ''
+
+  // 移除 HTML/JS 标签
+  let sanitized = input.replace(/<[^>]*>/g, '')
+
+  // 移除控制字符（\x00-\x1F，排除换行和制表符）
+  sanitized = sanitized.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '')
+
+  // 前后 trim
+  sanitized = sanitized.trim()
+
+  // 限制最大长度
+  if (sanitized.length > maxLength) {
+    sanitized = sanitized.substring(0, maxLength)
+  }
+
+  return sanitized
+}
+
+/**
  * 本地 Todo 仓储实现
  */
 export class LocalTodoRepository implements TodoRepository {
@@ -39,8 +65,8 @@ export class LocalTodoRepository implements TodoRepository {
     const now = Date.now()
     const newTodo: TodoItem = {
       id: this._generateId(),
-      title: input.title,
-      content: input.content?.trim() || '',
+      title: sanitizeInput(input.title, 50),
+      content: sanitizeInput(input.content || '', 500),
       completed: false,
       priority: input.priority || DEFAULT_PRIORITY,
       category: input.category || DEFAULT_CATEGORY,
@@ -134,10 +160,10 @@ export class LocalTodoRepository implements TodoRepository {
 
         // 只更新提供的字段
         if (input.title !== undefined) {
-          updates.title = input.title
+          updates.title = sanitizeInput(input.title, 50)
         }
         if (input.content !== undefined) {
-          updates.content = input.content
+          updates.content = sanitizeInput(input.content, 500)
         }
         if (input.priority !== undefined) {
           updates.priority = input.priority

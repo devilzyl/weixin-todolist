@@ -6,6 +6,11 @@
 
 import type { TodoPriority, TodoCategory } from '../../types/todo'
 
+/** 标题最大长度 */
+const TITLE_MAX_LENGTH = 50
+/** 内容最大长度 */
+const CONTENT_MAX_LENGTH = 500
+
 Component({
   properties: {
     /** 要编辑的任务（如果有值则是编辑模式） */
@@ -63,11 +68,21 @@ Component({
     },
     /** 标题输入 */
     onTitleInput(e: WechatMiniprogram.InputInput) {
-      this.setData({ title: e.detail.value })
+      let value = e.detail.value
+      // 限制最大长度
+      if (value.length > TITLE_MAX_LENGTH) {
+        value = value.substring(0, TITLE_MAX_LENGTH)
+      }
+      this.setData({ title: value })
     },
     /** 描述输入 */
     onContentInput(e: WechatMiniprogram.TextareaInput) {
-      this.setData({ content: e.detail.value })
+      let value = e.detail.value
+      // 限制最大长度
+      if (value.length > CONTENT_MAX_LENGTH) {
+        value = value.substring(0, CONTENT_MAX_LENGTH)
+      }
+      this.setData({ content: value })
     },
     /** 优先级选择 */
     onPriorityChange(e: WechatMiniprogram.TouchEventTap) {
@@ -81,12 +96,17 @@ Component({
     },
     /** 保存任务 */
     onSave() {
-      if (!this.data.title.trim()) {
+      const title = this.data.title.trim()
+      if (!title) {
         wx.showToast({ title: '请输入标题', icon: 'none' })
         return
       }
+      if (title.length > TITLE_MAX_LENGTH) {
+        wx.showToast({ title: '标题过长', icon: 'none' })
+        return
+      }
       this.triggerEvent('save', {
-        title: this.data.title.trim(),
+        title: title,
         content: this.data.content.trim(),
         priority: this.data.priority,
         category: this.data.category,
