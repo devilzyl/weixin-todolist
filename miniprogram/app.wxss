@@ -29,7 +29,7 @@ button::after {
   border: none;
 }
 
-/* ==================== 全局容器 ==================== */
+/* ==================== 全局页面容器 ==================== */
 
 .page {
   min-height: 100vh;
@@ -38,7 +38,9 @@ button::after {
   background-color: #F5F7FA;
 }
 
-.container {
+/* ==================== 全局容器 ==================== */
+
+.main-container {
   flex: 1;
   display: flex;
   flex-direction: column;
