@@ -39,33 +39,36 @@
     </view>
   </view>
 
-  <!-- 可滚动任务列表 -->
-  <scroll-view class="task-scroll" scroll-y enhanced show-scrollbar="{{false}}">
-    <view class="task-list">
-      <!-- 空状态 -->
-      <view wx:if="{{todos.length === 0}}" class="empty-state">
-        <text class="empty-text">还没有任务</text>
-        <text class="empty-subtext">点击右下角按钮添加您的第一个任务</text>
-      </view>
-
-      <!-- 任务项 -->
-      <view
-        wx:for="{{todos}}"
-        wx:key="id"
-        class="task-item {{item.completed ? 'completed' : ''}}"
-        bindtap="onToggle"
-        data-id="{{item.id}}"
-        bindlongpress="onLongPress"
-      >
-        <view class="checkbox"></view>
-        <view class="task-content">
-          <text class="task-text">{{item.title}}</text>
-          <text class="task-tag tag-{{item.category}}">{{categoryLabels[item.category]}}</text>
+  <!-- 任务列表容器 -->
+  <view class="task-container">
+    <!-- 可滚动任务列表 -->
+    <scroll-view class="task-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+      <view class="task-list">
+        <!-- 空状态 -->
+        <view wx:if="{{todos.length === 0}}" class="empty-state">
+          <text class="empty-text">还没有任务</text>
+          <text class="empty-subtext">点击右下角按钮添加您的第一个任务</text>
         </view>
-        <view class="task-priority priority-{{item.priority}}"></view>
+
+        <!-- 任务项 -->
+        <view
+          wx:for="{{todos}}"
+          wx:key="id"
+          class="task-item {{item.completed ? 'completed' : ''}}"
+          bindtap="onToggle"
+          data-id="{{item.id}}"
+          bindlongpress="onLongPress"
+        >
+          <view class="checkbox"></view>
+          <view class="task-content">
+            <text class="task-text">{{item.title}}</text>
+            <text class="task-tag tag-{{item.category}}">{{categoryLabels[item.category]}}</text>
+          </view>
+          <view class="task-priority priority-{{item.priority}}"></view>
+        </view>
       </view>
-    </view>
-  </scroll-view>
+    </scroll-view>
+  </view>
 
   <!-- 固定在右下角的添加按钮 -->
   <view class="fab-button {{theme}}" bindtap="onAddTask">
