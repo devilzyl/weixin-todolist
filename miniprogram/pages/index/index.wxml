@@ -1,84 +1,87 @@
 <!-- TodoList 首页 - Apple 风格 -->
 <view class="page {{theme}}">
   <view class="container">
-    <!-- 头部 -->
-    <view class="header">
-      <view class="title-group">
-        <text class="title">今日</text>
-        <text class="subtitle">{{formattedDate}}</text>
+    <view class="glass-card">
+      <!-- 头部 -->
+      <view class="header">
+        <view class="title-group">
+          <text class="title">今日</text>
+          <text class="subtitle">{{formattedDate}}</text>
+        </view>
+        <button class="theme-toggle" bindtap="toggleTheme">
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
       </view>
-      <button class="theme-toggle" bindtap="toggleTheme">
-        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="5"/>
-          <line x1="12" y1="1" x2="12" y2="3"/>
-          <line x1="12" y1="21" x2="12" y2="23"/>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-          <line x1="1" y1="12" x2="3" y2="12"/>
-          <line x1="21" y1="12" x2="23" y2="12"/>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+
+      <!-- 统计卡片 -->
+      <view class="stats">
+        <view class="stat-item">
+          <text class="stat-value">{{completedCount}}</text>
+          <text class="stat-label">已完成</text>
+        </view>
+        <view class="stat-item">
+          <text class="stat-value">{{pendingCount}}</text>
+          <text class="stat-label">待完成</text>
+        </view>
+      </view>
+
+      <!-- 任务列表 -->
+      <view class="task-list">
+        <!-- 空状态 -->
+        <view wx:if="{{todos.length === 0}}" class="empty-state">
+          <text class="empty-text">还没有任务</text>
+          <text class="empty-subtext">点击下方按钮添加您的第一个任务</text>
+        </view>
+
+        <!-- 任务项 -->
+        <view
+          wx:for="{{todos}}"
+          wx:key="id"
+          class="task-item {{item.completed ? 'completed' : ''}}"
+          bindtap="onToggle"
+          data-id="{{item.id}}"
+          bindlongpress="onLongPress"
+        >
+          <view class="checkbox"></view>
+          <view class="task-content">
+            <text class="task-text">{{item.title}}</text>
+            <text class="task-tag tag-{{item.category}}">{{categoryLabels[item.category]}}</text>
+          </view>
+          <view class="task-priority priority-{{item.priority}}"></view>
+        </view>
+      </view>
+
+      <!-- 添加任务按钮 -->
+      <button class="add-task-btn" bindtap="onAddTask">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
-        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
+        添加新任务
       </button>
     </view>
-
-    <!-- 统计卡片 -->
-    <view class="stats">
-      <view class="stat-item">
-        <text class="stat-value">{{completedCount}}</text>
-        <text class="stat-label">已完成</text>
-      </view>
-      <view class="stat-item">
-        <text class="stat-value">{{pendingCount}}</text>
-        <text class="stat-label">待完成</text>
-      </view>
-    </view>
-
-    <!-- 任务列表 -->
-    <view class="task-list">
-      <!-- 空状态 -->
-      <view wx:if="{{todos.length === 0}}" class="empty-state">
-        <text class="empty-text">还没有任务</text>
-        <text class="empty-subtext">点击下方按钮添加您的第一个任务</text>
-      </view>
-
-      <!-- 任务项 -->
-      <view
-        wx:for="{{todos}}"
-        wx:key="id"
-        class="task-item {{item.completed ? 'completed' : ''}}"
-        bindtap="onToggle"
-        data-id="{{item.id}}"
-        bindlongpress="onLongPress"
-      >
-        <view class="checkbox"></view>
-        <view class="task-content">
-          <text class="task-text">{{item.title}}</text>
-          <text class="task-tag tag-{{item.category}}">{{categoryLabels[item.category]}}</text>
-        </view>
-        <view class="task-priority priority-{{item.priority}}"></view>
-      </view>
-    </view>
-
-    <!-- 添加任务按钮 -->
-    <button class="add-task-btn" bindtap="onAddTask">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="12" y1="5" x2="12" y2="19"/>
-        <line x1="5" y1="12" x2="19" y2="12"/>
-      </svg>
-      添加新任务
-    </button>
   </view>
 
   <!-- 底部滑出面板 -->
   <bottom-sheet
     show="{{showSheet}}"
     title="{{sheetTitle}}"
+    theme="{{theme}}"
     bind:close="onSheetClose"
   >
-    <task-form todo="{{editingTodo}}" bind:save="onSaveTask" />
+    <task-form todo="{{editingTodo}}" theme="{{theme}}" bind:save="onSaveTask" />
   </bottom-sheet>
 </view>

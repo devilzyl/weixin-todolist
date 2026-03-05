@@ -13,6 +13,11 @@ Component({
       type: Object,
       value: null,
     },
+    /** 当前主题 */
+    theme: {
+      type: String,
+      value: 'light',
+    },
   },
   data: {
     /** 任务标题 */
@@ -46,12 +51,14 @@ Component({
       this.setData({ content: e.detail.value })
     },
     /** 优先级选择 */
-    onPriorityChange(e: WechatMiniprogram.CustomEvent) {
-      this.setData({ priority: e.detail.value })
+    onPriorityChange(e: WechatMiniprogram.TouchEventTap) {
+      const priority = e.currentTarget.dataset.value as TodoPriority
+      this.setData({ priority })
     },
     /** 分类选择 */
-    onCategoryChange(e: WechatMiniprogram.CustomEvent) {
-      this.setData({ category: e.detail.value })
+    onCategoryChange(e: WechatMiniprogram.TouchEventTap) {
+      const category = e.currentTarget.dataset.value as TodoCategory
+      this.setData({ category })
     },
     /** 保存任务 */
     onSave() {

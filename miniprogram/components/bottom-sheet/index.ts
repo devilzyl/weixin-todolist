@@ -16,6 +16,11 @@ Component({
       type: String,
       value: '',
     },
+    /** 当前主题 */
+    theme: {
+      type: String,
+      value: 'light',
+    },
   },
   data: {
     /** 是否显示动画 */

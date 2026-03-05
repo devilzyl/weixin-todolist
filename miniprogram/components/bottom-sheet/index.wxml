@@ -1,5 +1,5 @@
 <!-- 底部滑出面板 -->
-<view class="bottom-sheet {{show ? 'show' : ''}} {{animation ? 'animation' : ''}}">
+<view class="bottom-sheet {{show ? 'show' : ''}} {{animation ? 'animation' : ''}} {{theme === 'dark' ? 'dark' : ''}}">
   <!-- 遮罩层 -->
   <view class="mask {{show ? 'mask-show' : ''}}" bindtap="onMaskTap"></view>
 
