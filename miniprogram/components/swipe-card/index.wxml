@@ -28,9 +28,9 @@
   >
     <!-- 任务标题行 -->
     <view class="todo-header">
-      <!-- 完成状态图标 -->
-      <view class="todo-icon" catchtap="onIconTap">
-        <text class="icon-text">{{completed ? '✓' : '○'}}</text>
+      <!-- 完成状态复选框 -->
+      <view class="todo-checkbox {{completed ? 'checked' : ''}}" catchtap="onIconTap">
+        <view class="checkbox-icon" wx:if="{{completed}}">✓</view>
       </view>
 
       <!-- 优先级色点 -->
@@ -41,7 +41,7 @@
       />
 
       <!-- 任务标题 -->
-      <text class="todo-title">{{title}}</text>
+      <text class="todo-title {{completed ? 'completed-title' : ''}}">{{title}}</text>
     </view>
 
     <!-- 任务内容行 -->

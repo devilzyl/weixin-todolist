@@ -27,21 +27,31 @@
   gap: 12rpx;
 }
 
-/* 完成状态图标 */
-.todo-icon {
+/* 完成状态复选框 */
+.todo-checkbox {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40rpx;
-  height: 40rpx;
+  width: 44rpx;
+  height: 44rpx;
   flex-shrink: 0;
+  border: 3rpx solid #D9D9D9;
+  border-radius: 8rpx;
+  background-color: #FFFFFF;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.icon-text {
-  font-size: 36rpx;
+.todo-checkbox.checked {
+  background-color: #1890FF;
+  border-color: #1890FF;
+}
+
+.checkbox-icon {
+  font-size: 28rpx;
   font-weight: bold;
-  color: #666;
+  color: #FFFFFF;
+  line-height: 1;
 }
 
 .todo-title {
@@ -52,6 +62,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.todo-title.completed-title {
+  color: #999999;
+  text-decoration: line-through;
 }
 
 /* 任务内容行 */
