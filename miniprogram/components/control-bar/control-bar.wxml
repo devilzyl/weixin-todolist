@@ -8,7 +8,7 @@
     bindchange="onFilterChange"
   >
     <view class="control-item">
-      <text class="control-label">筛选</text>
+      <text class="control-label">筛选：</text>
       <text class="control-value">{{filterOptions[filterIndex]}}</text>
       <text class="picker-icon">▼</text>
     </view>
@@ -22,7 +22,7 @@
     bindchange="onSortChange"
   >
     <view class="control-item">
-      <text class="control-label">排序</text>
+      <text class="control-label">排序：</text>
       <text class="control-value">{{sortOptions[sortIndex]}}</text>
       <text class="picker-icon">▼</text>
     </view>
