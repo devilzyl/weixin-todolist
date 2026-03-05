@@ -28,6 +28,9 @@ export type TodoItem = {
 
   /** 优先级（high: 高 / medium: 中 / low: 低） */
   priority: TodoPriority
+
+  /** 分类（work: 工作 / personal: 个人 / default: 默认） */
+  category: TodoCategory
 }
 
 /**
@@ -97,6 +100,29 @@ export interface TodoRepository {
 export type TodoPriority = 'high' | 'medium' | 'low'
 
 /**
+ * 任务分类类型
+ */
+export type TodoCategory = 'work' | 'personal' | 'default'
+
+/**
+ * 分类配置常量
+ */
+export const CATEGORY_CONFIG = {
+  work: { label: '工作', color: '#ff9500' },
+  personal: { label: '个人', color: '#007aff' },
+  default: { label: '默认', color: '#86868b' },
+} as const
+
+/**
+ * 获取分类配置
+ * @param category - 分类值
+ * @returns 分类配置对象
+ */
+export function getCategoryConfig(category: TodoCategory) {
+  return CATEGORY_CONFIG[category]
+}
+
+/**
  * 优先级配置常量
  * 定义每个优先级的标签、图标和颜色
  */
@@ -110,6 +136,11 @@ export const PRIORITY_CONFIG = {
  * 默认优先级
  */
 export const DEFAULT_PRIORITY: TodoPriority = 'medium'
+
+/**
+ * 默认分类
+ */
+export const DEFAULT_CATEGORY: TodoCategory = 'default'
 
 /**
  * 获取优先级配置
