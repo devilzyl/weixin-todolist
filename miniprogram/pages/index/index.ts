@@ -56,6 +56,7 @@ Component({
      * 组件挂载时加载任务
      */
     attached() {
+      this.loadPreferences()
       this.reloadTodos()
     },
   },
@@ -386,6 +387,15 @@ Component({
       } catch (error) {
         console.error('保存排序偏好失败', error)
       }
+    },
+
+    /**
+     * 加载用户偏好设置
+     */
+    loadPreferences() {
+      const filterPriority = wx.getStorageSync('filterPriority') || 'all'
+      const sortBy = wx.getStorageSync('sortBy') || 'createdAt_desc'
+      this.setData({ filterPriority, sortBy })
     },
   },
 })
