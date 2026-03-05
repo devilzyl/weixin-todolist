@@ -1,0 +1,22 @@
+<!-- 底部滑出面板 -->
+<view class="bottom-sheet {{show ? 'show' : ''}} {{animation ? 'animation' : ''}}">
+  <!-- 遮罩层 -->
+  <view class="mask {{show ? 'mask-show' : ''}}" bindtap="onMaskTap"></view>
+
+  <!-- 面板内容 -->
+  <view class="sheet-content {{animation ? 'sheet-show' : ''}}">
+    <!-- 标题栏 -->
+    <view class="sheet-header">
+      <text class="sheet-title">{{title}}</text>
+      <view class="sheet-cancel" bindtap="onCancel">取消</view>
+    </view>
+
+    <!-- 分割线 -->
+    <view class="sheet-divider"></view>
+
+    <!-- 插槽内容 -->
+    <view class="sheet-body">
+      <slot></slot>
+    </view>
+  </view>
+</view>
