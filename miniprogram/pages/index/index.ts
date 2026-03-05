@@ -140,7 +140,12 @@ Component({
           break
       }
 
-      // 3. 更新显示列表
+      // 3. 按完成状态分组，未完成在前，已完成在后
+      const pendingTodos = result.filter((todo: TodoItem) => !todo.completed)
+      const completedTodos = result.filter((todo: TodoItem) => todo.completed)
+      result = [...pendingTodos, ...completedTodos]
+
+      // 4. 更新显示列表
       this.setData({ filteredTodos: result })
     },
 
