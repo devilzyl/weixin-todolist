@@ -46,21 +46,24 @@
 
 .focus-content {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16rpx;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 8rpx;
+  flex-wrap: nowrap;
 }
 
 .focus-desc {
   font-size: 32rpx;
   font-weight: 600;
   color: #1A1A1A;
+  flex-shrink: 0;
 }
 
 /* 高优先级文本 */
 .high-priority {
   color: #FF4D4F;
   font-weight: 600;
+  flex-shrink: 0;
 }
 
 /* ==================== 任务列表 ==================== */
