@@ -1,8 +1,9 @@
 .priority-dot {
   display: inline-block;
   border-radius: 50%;
-  margin-right: 8rpx;
+  margin-right: 12rpx;
   flex-shrink: 0;
+  padding: 4rpx;
 }
 
 .priority-dot:active {

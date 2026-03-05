@@ -13,7 +13,7 @@
   position: relative;
   z-index: 2;
   width: 100%;
-  padding: 24rpx;
+  padding: 28rpx 24rpx;
   background-color: #FFFFFF;
   display: flex;
   flex-direction: column;
@@ -24,7 +24,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 16rpx;
-  gap: 12rpx;
+  gap: 16rpx;
 }
 
 /* 完成状态复选框 */
@@ -35,6 +35,7 @@
   width: 44rpx;
   height: 44rpx;
   flex-shrink: 0;
+  margin-right: 8rpx;
   border: 3rpx solid #D9D9D9;
   border-radius: 8rpx;
   background-color: #FFFFFF;
@@ -73,9 +74,10 @@
 /* 任务内容行 */
 .todo-content {
   margin-bottom: 16rpx;
-  margin-left: 52rpx;
-  line-height: 1.5;
+  margin-left: 60rpx;
+  line-height: 1.6;
   cursor: pointer;
+  padding-top: 4rpx;
 }
 
 .content-text {
