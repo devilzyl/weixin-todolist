@@ -8,12 +8,12 @@
   <!-- 今日关注区域 -->
   <view class="focus-card" wx:if="{{todos.length > 0}}">
     <text class="focus-subtitle">今日关注</text>
-    <text class="focus-desc">
-      您有 {{pendingCount}} 个待办任务
+    <view class="focus-content">
+      <text class="focus-desc">您有 {{pendingCount}} 个待办任务</text>
       <text wx:if="{{highPriorityCount > 0}}" class="high-priority">
         （{{highPriorityCount}} 个高优先级）
       </text>
-    </text>
+    </view>
   </view>
 
   <!-- 任务列表 -->
