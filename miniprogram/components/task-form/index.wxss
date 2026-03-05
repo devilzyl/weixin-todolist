@@ -1,0 +1,124 @@
+/* 任务表单组件样式 */
+
+.task-form {
+  padding: 0;
+}
+
+/* 表单项 */
+.form-item {
+  margin-bottom: 32rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #1d1d1f;
+  margin-bottom: 16rpx;
+}
+
+/* 输入框 */
+.form-input {
+  width: 100%;
+  height: 88rpx;
+  padding: 0 24rpx;
+  background: #f2f2f7;
+  border-radius: 12rpx;
+  font-size: 30rpx;
+  color: #1d1d1f;
+}
+
+.form-input::placeholder {
+  color: #8e8e93;
+}
+
+/* 文本域 */
+.form-textarea {
+  width: 100%;
+  min-height: 160rpx;
+  padding: 24rpx;
+  background: #f2f2f7;
+  border-radius: 12rpx;
+  font-size: 30rpx;
+  color: #1d1d1f;
+  box-sizing: border-box;
+}
+
+.form-textarea::placeholder {
+  color: #8e8e93;
+}
+
+/* 选项组 */
+.option-group {
+  display: flex;
+  gap: 16rpx;
+}
+
+/* 选项按钮 */
+.option-btn {
+  flex: 1;
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: center;
+  background: #f2f2f7;
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  color: #8e8e93;
+  transition: all 0.2s ease;
+}
+
+.option-btn.active {
+  background: #007aff;
+  color: #ffffff;
+}
+
+/* 优先级按钮 */
+.option-btn.priority-high.active {
+  background: #ff3b30;
+}
+
+.option-btn.priority-medium.active {
+  background: #ff9500;
+}
+
+.option-btn.priority-low.active {
+  background: #34c759;
+}
+
+/* 保存按钮 */
+.save-btn {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  background: #007aff;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #ffffff;
+  margin-top: 48rpx;
+}
+
+.save-btn:active {
+  opacity: 0.8;
+}
+
+/* 暗色模式 */
+.task-form.dark .form-label {
+  color: #f5f5f7;
+}
+
+.task-form.dark .form-input,
+.task-form.dark .form-textarea {
+  background: #2c2c2e;
+  color: #f5f5f7;
+}
+
+.task-form.dark .form-input::placeholder,
+.task-form.dark .form-textarea::placeholder {
+  color: #8e8e93;
+}
+
+.task-form.dark .option-btn {
+  background: #2c2c2e;
+  color: #8e8e93;
+}
