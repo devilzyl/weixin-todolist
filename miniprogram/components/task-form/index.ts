@@ -31,17 +31,36 @@ Component({
   },
   lifetimes: {
     attached() {
-      if (this.data.todo) {
+      // 每次打开都重置表单数据
+      this.resetForm()
+    },
+  },
+  observers: {
+    todo(newTodo) {
+      if (newTodo) {
+        // 编辑模式：填充数据
         this.setData({
-          title: this.data.todo.title,
-          content: this.data.todo.content || '',
-          priority: this.data.todo.priority,
-          category: this.data.todo.category,
+          title: newTodo.title,
+          content: newTodo.content || '',
+          priority: newTodo.priority,
+          category: newTodo.category,
         })
+      } else {
+        // 新增模式：重置数据
+        this.resetForm()
       }
     },
   },
   methods: {
+    /** 重置表单数据 */
+    resetForm() {
+      this.setData({
+        title: '',
+        content: '',
+        priority: 'medium',
+        category: 'default',
+      })
+    },
     /** 标题输入 */
     onTitleInput(e: WechatMiniprogram.InputInput) {
       this.setData({ title: e.detail.value })

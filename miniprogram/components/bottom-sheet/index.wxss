@@ -41,8 +41,10 @@
   border-radius: 40rpx 40rpx 0 0;
   transform: translateY(100%);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  max-height: 85vh;
+  max-height: 90vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .sheet-content.sheet-show {
@@ -54,7 +56,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 48rpx 40rpx 32rpx;
+  padding: 48rpx 40rpx 24rpx;
+  flex-shrink: 0;
 }
 
 .sheet-title {
@@ -73,13 +76,16 @@
   height: 1rpx;
   background: rgba(0, 0, 0, 0.1);
   margin: 0 40rpx;
+  flex-shrink: 0;
 }
 
 /* 内容区域 */
 .sheet-body {
-  padding: 40rpx;
-  max-height: 65vh;
+  padding: 32rpx 40rpx;
+  flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 /* 暗色模式 */
