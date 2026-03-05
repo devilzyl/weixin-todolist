@@ -71,7 +71,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 3. TypeScript 编译由 IDE 的 TypeScript 插件自动处理
 4. 使用内置模拟器进行测试
 
-**无 npm 脚本** - 构建、测试和代码检查由微信开发者工具处理。
+**无 npm 脚本用于构建** - 构建、编译由微信开发者工具处理。
+
+### Testing
+
+项目使用 minium 自动化测试框架：
+
+```bash
+# 运行测试
+npm test
+
+# 生成测试报告
+npm run test:report
+```
 
 ## Project Structure
 
@@ -82,7 +94,19 @@ todulist/
 │   ├── app.json         # 应用配置: 页面、路由、窗口设置
 │   ├── app.wxss         # 全局样式
 │   ├── pages/           # 页面组件
-│   └── utils/           # 工具模块
+│   │   ├── index/       # 任务列表页
+│   │   ├── task-form/   # 新增任务页
+│   │   └── task-edit/   # 编辑任务页
+│   ├── components/      # 可复用组件
+│   │   ├── priority-dot/    # 优先级指示器
+│   │   ├── control-bar/     # 筛选排序控制栏
+│   │   └── swipe-card/      # 滑动卡片
+│   ├── utils/           # 工具模块
+│   │   ├── todo-repository.ts    # Todo 数据仓储
+│   │   ├── data-migration.ts     # 数据迁移工具
+│   │   └── util.ts              # 通用工具函数
+│   └── types/           # TypeScript 类型定义
+│       └── todo.ts      # Todo 核心类型
 ├── typings/             # TypeScript 类型定义
 ├── tsconfig.json        # TypeScript 配置
 ├── project.config.json  # 微信项目配置
@@ -154,6 +178,49 @@ const todos = wx.getStorageSync('todos') || []
 wx.setStorageSync('todos', todos)
 ```
 
+### Repository Pattern（仓储模式）
+
+项目使用仓储模式隔离数据访问层，便于未来迁移到云开发：
+
+**核心接口:** `TodoRepository` (定义在 `types/todo.ts`)
+**当前实现:** `LocalTodoRepository` (实现基于微信本地存储)
+
+```typescript
+// 使用示例
+import { LocalTodoRepository } from '../../utils/todo-repository'
+
+const repository = new LocalTodoRepository()
+
+// CRUD 操作
+const todos = repository.list()
+const newTodo = repository.create({ title: '新任务' })
+repository.toggle(todoId)
+repository.remove(todoId)
+```
+
+**设计优势:**
+- 接口与实现分离，易于替换存储方案
+- 内置数据校验和自愈机制
+- 统一的数据操作入口
+
+**存储键名:** `todos:v1` (支持未来数据迁移)
+
+### Component Communication
+
+子组件通过 `triggerEvent` 向父组件发送事件：
+
+```typescript
+// 子组件中
+this.triggerEvent('toggle', { id: this.data.todo.id })
+```
+
+```wxml
+<!-- 父组件中 -->
+<swipe-card bind:toggle="handleToggle" />
+```
+
+**事件命名规范:** 使用动词形式（toggle, delete, change）
+
 ### Page/Component Files
 
 每个页面需要 4 个文件：
@@ -161,14 +228,6 @@ wx.setStorageSync('todos', todos)
 - `.wxml` - 模板（类似 HTML，使用 WXML 语法）
 - `.wxss` - 样式（类似 CSS，使用 `rpx` 单位）
 - `.json` - 页面配置
-
-**文件扩展名映射：**
-| 微信小程序 | Web 标准 |
-|-----------|---------|
-| `.wxml` | `.html` |
-| `.wxss` | `.css` |
-| `.ts` | `.js` / TypeScript |
-| `.json` | JSON 配置 |
 
 ### WXML Template Syntax
 
@@ -200,6 +259,64 @@ wx.setStorageSync('todos', todos)
 - **构建系统:** 微信开发者工具（TypeScript 插件）
 - **类型定义:** miniprogram-api-typings
 
+## Common Patterns
+
+### 操作锁模式
+
+防止用户快速连点导致的状态混乱：
+
+```typescript
+Component({
+  data: {
+    isBusy: false,
+  },
+  methods: {
+    handleAction() {
+      if (this.data.isBusy) return
+
+      this.setData({ isBusy: true })
+
+      // 执行操作...
+
+      setTimeout(() => {
+        this.setData({ isBusy: false })
+      }, 300)
+    }
+  }
+})
+```
+
+### 用户偏好持久化
+
+使用 `wx.setStorageSync` 保存筛选/排序偏好：
+
+```typescript
+// 保存
+wx.setStorageSync('filterPriority', 'high')
+
+// 读取（带默认值）
+const filter = wx.getStorageSync('filterPriority') || 'all'
+```
+
+## Adding New Components
+
+1. 在 `miniprogram/components/` 中创建目录
+2. 创建 4 个文件: `.ts`, `.wxml`, `.wxss`, `.json`
+3. 在 `.json` 中声明为自定义组件:
+   ```json
+   {
+     "component": true
+   }
+   ```
+4. 在页面的 `.json` 中引用:
+   ```json
+   {
+     "usingComponents": {
+       "my-component": "/components/my-component/index"
+     }
+   }
+   ```
+
 ## Adding New Pages
 
 1. 在 `miniprogram/pages/` 中创建目录
@@ -209,5 +326,5 @@ wx.setStorageSync('todos', todos)
 
 ---
 
-**最后更新**: 2026-03-04
+**最后更新**: 2026-03-05
 **维护者**: Claude Sonnet 4.6
