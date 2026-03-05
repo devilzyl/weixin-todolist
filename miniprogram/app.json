@@ -1,15 +1,18 @@
 {
   "pages": [
-    "pages/index/index",
-    "pages/task-form/index",
-    "pages/task-edit/index"
+    "pages/index/index"
   ],
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "TodoList",
-    "navigationBarBackgroundColor": "#ffffff"
+    "navigationBarTitleText": "今日待办",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#e8f0f8"
   },
   "style": "v2",
   "componentFramework": "glass-easel",
-  "lazyCodeLoading": "requiredComponents"
+  "lazyCodeLoading": "requiredComponents",
+  "usingComponents": {
+    "bottom-sheet": "/components/bottom-sheet/index",
+    "task-form": "/components/task-form/index"
+  }
 }
