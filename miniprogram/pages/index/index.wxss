@@ -266,7 +266,6 @@
 .task-list {
   display: flex;
   flex-direction: column;
-  gap: 4rpx;
   padding: 0 24rpx 24rpx;
 }
 
@@ -304,24 +303,27 @@
 .task-item {
   display: flex;
   align-items: center;
-  padding: 28rpx 32rpx;
-  border-radius: 24rpx;
+  padding: 24rpx 16rpx;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  background: rgba(255, 255, 255, 0.6);
+  border-bottom: 1rpx solid rgba(0, 0, 0, 0.04);
+}
+
+.task-item:last-child {
+  border-bottom: none;
 }
 
 .task-item:hover {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.02);
 }
 
 .page.dark .task-item {
-  background: rgba(255, 255, 255, 0.08);
+  border-bottom-color: rgba(255, 255, 255, 0.05);
 }
 
 .page.dark .task-item:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 /* 复选框 */
