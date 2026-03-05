@@ -37,22 +37,24 @@
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
 }
 
-/* ==================== 固定顶部区域 ==================== */
+/* ==================== 整体容器 ==================== */
 
-.fixed-header {
-  flex-shrink: 0;
+.main-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   background: rgba(255, 255, 255, 0.65);
   backdrop-filter: blur(40rpx);
   -webkit-backdrop-filter: blur(40rpx);
   border-radius: 40rpx;
   border: 1rpx solid rgba(255, 255, 255, 0.5);
   box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08), 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
-  padding: 40rpx;
+  overflow: hidden;
   position: relative;
   z-index: 1;
 }
 
-.fixed-header::before {
+.main-container::before {
   content: '';
   position: absolute;
   top: 0;
@@ -63,14 +65,22 @@
   border-radius: 40rpx 40rpx 0 0;
 }
 
-.page.dark .fixed-header {
+.page.dark .main-container {
   background: rgba(30, 30, 50, 0.7);
   border-color: rgba(255, 255, 255, 0.15);
   box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3), inset 0 1rpx 0 rgba(255, 255, 255, 0.08);
 }
 
-.page.dark .fixed-header::before {
+.page.dark .main-container::before {
   background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+}
+
+/* ==================== 固定顶部区域 ==================== */
+
+.fixed-header {
+  flex-shrink: 0;
+  padding: 40rpx;
+  padding-bottom: 32rpx;
 }
 
 /* 头部 */
@@ -246,36 +256,18 @@
   color: #a1a1a6;
 }
 
-/* ==================== 任务列表容器 ==================== */
+/* ==================== 可滚动任务列表 ==================== */
 
-.task-container {
-  flex: 1;
-  margin-top: 24rpx;
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(40rpx);
-  -webkit-backdrop-filter: blur(40rpx);
-  border-radius: 40rpx;
-  border: 1rpx solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.08), 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
-  overflow: hidden;
-}
-
-.page.dark .task-container {
-  background: rgba(30, 30, 50, 0.7);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3), inset 0 1rpx 0 rgba(255, 255, 255, 0.08);
-}
-
-/* 可滚动任务列表 */
 .task-scroll {
-  height: 100%;
+  flex: 1;
+  height: 0;
 }
 
 .task-list {
   display: flex;
   flex-direction: column;
   gap: 4rpx;
-  padding: 24rpx;
+  padding: 0 24rpx 24rpx;
 }
 
 /* 空状态 */
