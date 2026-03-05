@@ -12,6 +12,13 @@ import { PRIORITY_CONFIG } from '../../types/todo'
 /** 仓储实例 */
 const repository = new LocalTodoRepository()
 
+/** 优先级权重映射 */
+const PRIORITY_ORDER = {
+  high: 3,
+  medium: 2,
+  low: 1,
+} as const
+
 Component({
   /** 页面数据 */
   data: {
@@ -121,16 +128,14 @@ Component({
           result.sort((a: TodoItem, b: TodoItem) => a.createdAt - b.createdAt)
           break
         case 'priority_desc':
-          result.sort((a: TodoItem, b: TodoItem) => {
-            const order = { high: 3, medium: 2, low: 1 }
-            return order[b.priority] - order[a.priority]
-          })
+          result.sort((a: TodoItem, b: TodoItem) => PRIORITY_ORDER[b.priority] - PRIORITY_ORDER[a.priority])
           break
         case 'priority_asc':
-          result.sort((a: TodoItem, b: TodoItem) => {
-            const order = { high: 3, medium: 2, low: 1 }
-            return order[a.priority] - order[b.priority]
-          })
+          result.sort((a: TodoItem, b: TodoItem) => PRIORITY_ORDER[a.priority] - PRIORITY_ORDER[b.priority])
+          break
+        default:
+          // 未知排序方式，保持原顺序
+          console.warn(`未知的排序方式: ${this.data.sortBy}`)
           break
       }
 
@@ -283,9 +288,6 @@ Component({
 
       this.reloadTodos()
 
-      // 应用筛选和排序
-      this.filterAndSortTodos()
-
       setTimeout(() => {
         this.setData({ isBusy: false })
       }, 300)
@@ -326,11 +328,8 @@ Component({
               })
             }
 
-            // 刷新列表
+            // 刷新列表（内部已调用 filterAndSortTodos）
             this.reloadTodos()
-
-            // 应用筛选和排序
-            this.filterAndSortTodos()
 
             // 释放操作锁
             setTimeout(() => {
