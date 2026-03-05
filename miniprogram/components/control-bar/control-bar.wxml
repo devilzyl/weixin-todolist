@@ -1,0 +1,28 @@
+<!-- 控制栏组件 -->
+<view class="control-bar">
+  <!-- 筛选器 -->
+  <picker
+    mode="selector"
+    range="{{filterOptions}}"
+    bindchange="onFilterChange"
+  >
+    <view class="control-item">
+      <text class="control-label">筛选</text>
+      <text class="control-value">{{filterOptions[filterValueMap.indexOf(filterValue)]}}</text>
+      <text class="picker-icon">▼</text>
+    </view>
+  </picker>
+
+  <!-- 排序器 -->
+  <picker
+    mode="selector"
+    range="{{sortOptions}}"
+    bindchange="onSortChange"
+  >
+    <view class="control-item">
+      <text class="control-label">排序</text>
+      <text class="control-value">{{sortOptions[sortValueMap.indexOf(sortValue)]}}</text>
+      <text class="picker-icon">▼</text>
+    </view>
+  </picker>
+</view>
