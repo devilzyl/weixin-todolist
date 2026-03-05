@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "待办事项",
   "usingComponents": {
-    "swipe-card": "/components/swipe-card/index"
+    "swipe-card": "/components/swipe-card/index",
+    "control-bar": "/components/control-bar/control-bar"
   }
 }

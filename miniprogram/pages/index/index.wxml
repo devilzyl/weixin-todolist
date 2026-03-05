@@ -13,6 +13,14 @@
     </text>
   </view>
 
+  <!-- 筛选排序控制栏 -->
+  <control-bar
+    filterValue="{{filterPriority}}"
+    sortValue="{{sortBy}}"
+    bind:filterchange="handleFilterChange"
+    bind:sortchange="handleSortChange"
+  />
+
   <!-- 任务列表 -->
   <view class="task-list">
     <!-- 空态 -->
