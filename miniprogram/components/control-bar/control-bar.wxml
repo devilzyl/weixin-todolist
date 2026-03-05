@@ -4,11 +4,12 @@
   <picker
     mode="selector"
     range="{{filterOptions}}"
+    value="{{filterIndex}}"
     bindchange="onFilterChange"
   >
     <view class="control-item">
       <text class="control-label">筛选</text>
-      <text class="control-value">{{filterOptions[filterValueMap.indexOf(filterValue)]}}</text>
+      <text class="control-value">{{filterOptions[filterIndex]}}</text>
       <text class="picker-icon">▼</text>
     </view>
   </picker>
@@ -17,11 +18,12 @@
   <picker
     mode="selector"
     range="{{sortOptions}}"
+    value="{{sortIndex}}"
     bindchange="onSortChange"
   >
     <view class="control-item">
       <text class="control-label">排序</text>
-      <text class="control-value">{{sortOptions[sortValueMap.indexOf(sortValue)]}}</text>
+      <text class="control-value">{{sortOptions[sortIndex]}}</text>
       <text class="picker-icon">▼</text>
     </view>
   </picker>

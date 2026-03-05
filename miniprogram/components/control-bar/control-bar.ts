@@ -24,10 +24,33 @@ Component({
     filterOptions: ['全部', '高优先级', '中优先级', '低优先级'],
     /** 筛选值映射 */
     filterValueMap: ['all', 'high', 'medium', 'low'],
+    /** 当前筛选索引 */
+    filterIndex: 0,
     /** 排序选项列表 */
     sortOptions: ['最新创建', '最早创建', '高优先级', '低优先级'],
     /** 排序值映射 */
-    sortValueMap: ['createdAt_desc', 'createdAt_asc', 'priority_desc', 'priority_asc']
+    sortValueMap: ['createdAt_desc', 'createdAt_asc', 'priority_desc', 'priority_asc'],
+    /** 当前排序索引 */
+    sortIndex: 0
+  },
+
+  /** 监听属性变化 */
+  observers: {
+    /**
+     * 监听筛选值变化，更新索引
+     */
+    'filterValue': function(filterValue: string) {
+      const index = this.data.filterValueMap.indexOf(filterValue)
+      this.setData({ filterIndex: index })
+    },
+
+    /**
+     * 监听排序值变化，更新索引
+     */
+    'sortValue': function(sortValue: string) {
+      const index = this.data.sortValueMap.indexOf(sortValue)
+      this.setData({ sortIndex: index })
+    }
   },
 
   /** 组件方法 */
