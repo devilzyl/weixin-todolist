@@ -1,70 +1,71 @@
 <!-- TodoList 首页 - Apple 风格 -->
 <view class="page {{theme}}">
-  <view class="container">
-    <view class="glass-card">
-      <!-- 头部 -->
-      <view class="header">
-        <view class="title-group">
-          <text class="title">今日</text>
-          <text class="subtitle">{{formattedDate}}</text>
-        </view>
-        <view class="theme-toggle" bindtap="toggleTheme">
-          <!-- 太阳图标 -->
-          <view class="sun-icon">
-            <view class="sun-core"></view>
-            <view class="sun-ray sun-ray-1"></view>
-            <view class="sun-ray sun-ray-2"></view>
-            <view class="sun-ray sun-ray-3"></view>
-            <view class="sun-ray sun-ray-4"></view>
-            <view class="sun-ray sun-ray-5"></view>
-            <view class="sun-ray sun-ray-6"></view>
-            <view class="sun-ray sun-ray-7"></view>
-            <view class="sun-ray sun-ray-8"></view>
-          </view>
-          <!-- 月亮图标 -->
-          <view class="moon-icon"></view>
-        </view>
+  <!-- 固定顶部区域 -->
+  <view class="fixed-header">
+    <!-- 头部 -->
+    <view class="header">
+      <view class="title-group">
+        <text class="title">今日</text>
+        <text class="subtitle">{{formattedDate}}</text>
       </view>
-
-      <!-- 统计卡片 -->
-      <view class="stats">
-        <view class="stat-item">
-          <text class="stat-value">{{completedCount}}</text>
-          <text class="stat-label">已完成</text>
+      <view class="theme-toggle" bindtap="toggleTheme">
+        <!-- 太阳图标 -->
+        <view class="sun-icon">
+          <view class="sun-core"></view>
+          <view class="sun-ray sun-ray-1"></view>
+          <view class="sun-ray sun-ray-2"></view>
+          <view class="sun-ray sun-ray-3"></view>
+          <view class="sun-ray sun-ray-4"></view>
+          <view class="sun-ray sun-ray-5"></view>
+          <view class="sun-ray sun-ray-6"></view>
+          <view class="sun-ray sun-ray-7"></view>
+          <view class="sun-ray sun-ray-8"></view>
         </view>
-        <view class="stat-item">
-          <text class="stat-value">{{pendingCount}}</text>
-          <text class="stat-label">待完成</text>
-        </view>
+        <!-- 月亮图标 -->
+        <view class="moon-icon"></view>
       </view>
+    </view>
 
-      <!-- 任务列表 -->
-      <view class="task-list">
-        <!-- 空状态 -->
-        <view wx:if="{{todos.length === 0}}" class="empty-state">
-          <text class="empty-text">还没有任务</text>
-          <text class="empty-subtext">点击右下角按钮添加您的第一个任务</text>
-        </view>
-
-        <!-- 任务项 -->
-        <view
-          wx:for="{{todos}}"
-          wx:key="id"
-          class="task-item {{item.completed ? 'completed' : ''}}"
-          bindtap="onToggle"
-          data-id="{{item.id}}"
-          bindlongpress="onLongPress"
-        >
-          <view class="checkbox"></view>
-          <view class="task-content">
-            <text class="task-text">{{item.title}}</text>
-            <text class="task-tag tag-{{item.category}}">{{categoryLabels[item.category]}}</text>
-          </view>
-          <view class="task-priority priority-{{item.priority}}"></view>
-        </view>
+    <!-- 统计卡片 -->
+    <view class="stats">
+      <view class="stat-item">
+        <text class="stat-value">{{completedCount}}</text>
+        <text class="stat-label">已完成</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{pendingCount}}</text>
+        <text class="stat-label">待完成</text>
       </view>
     </view>
   </view>
+
+  <!-- 可滚动任务列表 -->
+  <scroll-view class="task-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+    <view class="task-list">
+      <!-- 空状态 -->
+      <view wx:if="{{todos.length === 0}}" class="empty-state">
+        <text class="empty-text">还没有任务</text>
+        <text class="empty-subtext">点击右下角按钮添加您的第一个任务</text>
+      </view>
+
+      <!-- 任务项 -->
+      <view
+        wx:for="{{todos}}"
+        wx:key="id"
+        class="task-item {{item.completed ? 'completed' : ''}}"
+        bindtap="onToggle"
+        data-id="{{item.id}}"
+        bindlongpress="onLongPress"
+      >
+        <view class="checkbox"></view>
+        <view class="task-content">
+          <text class="task-text">{{item.title}}</text>
+          <text class="task-tag tag-{{item.category}}">{{categoryLabels[item.category]}}</text>
+        </view>
+        <view class="task-priority priority-{{item.priority}}"></view>
+      </view>
+    </view>
+  </scroll-view>
 
   <!-- 固定在右下角的添加按钮 -->
   <view class="fab-button {{theme}}" bindtap="onAddTask">
