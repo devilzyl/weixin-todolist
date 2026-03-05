@@ -2,11 +2,15 @@
 
 .task-form {
   padding: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* 表单项 */
 .form-item {
   margin-bottom: 32rpx;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-label {
@@ -22,7 +26,8 @@
 /* 输入框 */
 .form-input {
   width: 100%;
-  padding: 28rpx 32rpx;
+  height: 96rpx;
+  padding: 0 32rpx;
   border-radius: 24rpx;
   border: 1rpx solid rgba(0, 0, 0, 0.08);
   background: rgba(255, 255, 255, 0.6);
@@ -31,6 +36,7 @@
   color: #1d1d1f;
   transition: all 0.25s ease;
   box-sizing: border-box;
+  line-height: 96rpx;
 }
 
 .form-input::placeholder {
@@ -41,13 +47,14 @@
   border-color: #007aff;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 0 0 6rpx rgba(0, 122, 255, 0.15);
+  outline: none;
 }
 
 /* 文本域 */
 .form-textarea {
   width: 100%;
   min-height: 160rpx;
-  padding: 28rpx 32rpx;
+  padding: 24rpx 32rpx;
   border-radius: 24rpx;
   border: 1rpx solid rgba(0, 0, 0, 0.08);
   background: rgba(255, 255, 255, 0.6);
@@ -56,6 +63,7 @@
   color: #1d1d1f;
   box-sizing: border-box;
   transition: all 0.25s ease;
+  line-height: 1.5;
 }
 
 .form-textarea::placeholder {
@@ -66,12 +74,14 @@
   border-color: #007aff;
   background: rgba(255, 255, 255, 0.9);
   box-shadow: 0 0 0 6rpx rgba(0, 122, 255, 0.15);
+  outline: none;
 }
 
 /* 选项组 */
 .option-group {
   display: flex;
   gap: 16rpx;
+  width: 100%;
 }
 
 /* 标签选项按钮 */
@@ -86,6 +96,7 @@
   color: #86868b;
   text-align: center;
   transition: all 0.25s ease;
+  box-sizing: border-box;
 }
 
 .option-btn.active {
@@ -121,7 +132,8 @@
 /* 保存按钮 */
 .save-btn {
   width: 100%;
-  padding: 24rpx 40rpx;
+  height: 88rpx;
+  line-height: 88rpx;
   border-radius: 24rpx;
   border: none;
   background: linear-gradient(135deg, #007aff, #0051d4);
