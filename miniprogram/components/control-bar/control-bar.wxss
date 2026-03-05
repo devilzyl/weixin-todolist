@@ -1,8 +1,7 @@
 /* 控制栏样式 */
 .control-bar {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   margin: 0 32rpx 24rpx 32rpx;
   padding: 32rpx;
   background-color: #FFFFFF;
@@ -13,15 +12,16 @@
 
 /* 控制项样式 */
 .control-item {
-  width: 100%;
+  flex: 1;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding: 24rpx;
   background: #F5F7FA;
   border-radius: 16rpx;
   font-size: 28rpx;
   color: #333;
+  gap: 16rpx;
 }
 
 /* 标签样式 */
