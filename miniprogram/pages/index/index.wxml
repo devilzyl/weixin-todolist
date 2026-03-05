@@ -43,7 +43,7 @@
         <!-- 空状态 -->
         <view wx:if="{{todos.length === 0}}" class="empty-state">
           <text class="empty-text">还没有任务</text>
-          <text class="empty-subtext">点击下方按钮添加您的第一个任务</text>
+          <text class="empty-subtext">点击右下角按钮添加您的第一个任务</text>
         </view>
 
         <!-- 任务项 -->
@@ -63,13 +63,12 @@
           <view class="task-priority priority-{{item.priority}}"></view>
         </view>
       </view>
-
-      <!-- 添加任务按钮 -->
-      <button class="add-task-btn" bindtap="onAddTask">
-        <view class="btn-icon"></view>
-        添加新任务
-      </button>
     </view>
+  </view>
+
+  <!-- 固定在右下角的添加按钮 -->
+  <view class="fab-button {{theme}}" bindtap="onAddTask">
+    <view class="fab-icon"></view>
   </view>
 
   <!-- 底部滑出面板 -->
