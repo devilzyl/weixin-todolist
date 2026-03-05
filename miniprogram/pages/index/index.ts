@@ -96,6 +96,46 @@ Component({
         pendingCount,
         highPriorityCount,
       })
+
+      // 应用筛选和排序
+      this.filterAndSortTodos()
+    },
+
+    /**
+     * 根据当前筛选和排序条件处理任务列表
+     */
+    filterAndSortTodos() {
+      let result = [...this.data.todos]
+
+      // 1. 筛选
+      if (this.data.filterPriority !== 'all') {
+        result = result.filter((todo: TodoItem) => todo.priority === this.data.filterPriority)
+      }
+
+      // 2. 排序
+      switch (this.data.sortBy) {
+        case 'createdAt_desc':
+          result.sort((a: TodoItem, b: TodoItem) => b.createdAt - a.createdAt)
+          break
+        case 'createdAt_asc':
+          result.sort((a: TodoItem, b: TodoItem) => a.createdAt - b.createdAt)
+          break
+        case 'priority_desc':
+          result.sort((a: TodoItem, b: TodoItem) => {
+            const order = { high: 3, medium: 2, low: 1 }
+            return order[b.priority] - order[a.priority]
+          })
+          break
+        case 'priority_asc':
+          result.sort((a: TodoItem, b: TodoItem) => {
+            const order = { high: 3, medium: 2, low: 1 }
+            return order[a.priority] - order[b.priority]
+          })
+          break
+      }
+
+      // 3. 更新显示列表
+      this.setData({ filteredTodos: result })
     },
 
     /**
@@ -243,6 +283,9 @@ Component({
 
       this.reloadTodos()
 
+      // 应用筛选和排序
+      this.filterAndSortTodos()
+
       setTimeout(() => {
         this.setData({ isBusy: false })
       }, 300)
@@ -286,6 +329,9 @@ Component({
             // 刷新列表
             this.reloadTodos()
 
+            // 应用筛选和排序
+            this.filterAndSortTodos()
+
             // 释放操作锁
             setTimeout(() => {
               this.setData({
@@ -317,6 +363,30 @@ Component({
       this.setData({ sortBy: value })
       this.saveSortPreference(value)
       this.filterAndSortTodos()
+    },
+
+    /**
+     * 保存筛选偏好到本地存储
+     * @param value - 筛选条件值
+     */
+    saveFilterPreference(value: string) {
+      try {
+        wx.setStorageSync('filterPriority', value)
+      } catch (error) {
+        console.error('保存筛选偏好失败', error)
+      }
+    },
+
+    /**
+     * 保存排序偏好到本地存储
+     * @param value - 排序方式值
+     */
+    saveSortPreference(value: string) {
+      try {
+        wx.setStorageSync('sortBy', value)
+      } catch (error) {
+        console.error('保存排序偏好失败', error)
+      }
     },
   },
 })
