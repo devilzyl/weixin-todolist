@@ -1,7 +1,0 @@
-<view
-  class="priority-dot"
-  style="background-color: {{dotColor}}; width: {{dotSize}}px; height: {{dotSize}}px;"
-  bind:tap="onTap"
-  data-todo-id="{{todoId}}"
->
-</view>
