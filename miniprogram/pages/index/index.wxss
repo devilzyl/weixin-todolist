@@ -44,19 +44,10 @@
   color: #666666;
 }
 
-.focus-content {
-  display: flex;
-  align-items: baseline;
-  justify-content: flex-start;
-  gap: 8rpx;
-  flex-wrap: nowrap;
-}
-
 .focus-desc {
   font-size: 32rpx;
   font-weight: 600;
   color: #1A1A1A;
-  flex-shrink: 0;
 }
 
 /* 高优先级文本 */
