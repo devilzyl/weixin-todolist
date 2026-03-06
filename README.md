@@ -1,45 +1,44 @@
 # 微信小程序 TodoList
 
-基于 TypeScript 和 glass-easel 框架开发的现代任务管理应用，支持离线使用。
+<div align="center">
 
-## 功能特性
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![微信小程序](https://img.shields.io/badge/微信小程序-2023+-07C160?style=flat&logo=wechat)](https://miniprogram.com/)
 
-- **任务管理**: 新增、编辑、删除、完成状态切换
-- **批量操作**: 一键全部完成/取消、清除已完成
-- **优先级**: 高/中/低三级优先级，带循环切换
-- **筛选排序**: 按优先级筛选，支持多种排序方式
-- **数据持久化**: 基于微信本地存储，离线可用
-- **现代设计**: 渐变卡片、流畅动画、安全区域适配
+现代优雅的任务管理应用，支持离线使用。
 
-## 技术栈
+</div>
 
-- **框架**: 微信小程序原生 + glass-easel
-- **语言**: TypeScript (严格模式)
+## 功能
+
+| 功能 | 说明 |
+|:---|:---|
+| 任务管理 | 新增、编辑、删除、完成 |
+| 优先级 | 高/中/低三级，循环切换 |
+| 筛选排序 | 按优先级筛选，多种排序 |
+| 批量操作 | 一键全部完成/清除已完成 |
+| 数据持久化 | 本地存储，离线可用 |
+
+## 快速开始
+
+```bash
+# 克隆项目
+git clone https://github.com/devilzyl/weixin-todolist.git
+```
+
+1. 下载 [微信开发者工具](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)
+2. 导入项目目录
+3. 点击"编译"预览
 
 ## 项目结构
 
 ```
 miniprogram/
-├── pages/          # 页面（列表、新增、编辑）
-├── components/     # 可复用组件
-├── utils/          # 工具模块（数据仓储）
-└── types/          # TypeScript 类型定义
+├── pages/       # 页面（列表、新增、编辑）
+├── components/  # 组件
+├── utils/       # 工具模块
+└── types/       # 类型定义
 ```
-
-## 快速开始
-
-1. **克隆项目**
-   ```bash
-   git clone https://github.com/devilzyl/weixin-todolist.git
-   ```
-
-2. **打开微信开发者工具**
-   - 下载 [微信开发者工具](https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html)
-   - 导入项目目录
-
-3. **运行**
-   - TypeScript 自动编译
-   - 点击"编译"按钮预览
 
 ## 许可证
 
@@ -47,4 +46,4 @@ MIT License
 
 ---
 
-**作者**: devilzyl | **项目地址**: https://github.com/devilzyl/weixin-todolist
+**Author**: [devilzyl](https://github.com/devilzyl)
