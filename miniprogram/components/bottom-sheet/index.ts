@@ -21,6 +21,11 @@ Component({
       type: String,
       value: 'light',
     },
+    /** 模式：edit-编辑模式，add-添加模式 */
+    mode: {
+      type: String,
+      value: 'add',
+    },
   },
   data: {
     /** 是否显示动画 */
@@ -42,7 +47,11 @@ Component({
     onMaskTap() {
       this.triggerEvent('close')
     },
-    /** 点击取消按钮关闭 */
+    /** 点击保存按钮 */
+    onSave() {
+      this.triggerEvent('save')
+    },
+    /** 点击取消按钮关闭（保留以备后用） */
     onCancel() {
       this.triggerEvent('close')
     },

@@ -80,8 +80,10 @@
     show="{{showSheet}}"
     title="{{sheetTitle}}"
     theme="{{theme}}"
+    mode="{{editingTodo ? 'edit' : 'add'}}"
     bind:close="onSheetClose"
+    bind:save="onFormSave"
   >
-    <task-form todo="{{editingTodo}}" theme="{{theme}}" bind:save="onSaveTask" />
+    <task-form id="taskForm" todo="{{editingTodo}}" theme="{{theme}}" />
   </bottom-sheet>
 </view>

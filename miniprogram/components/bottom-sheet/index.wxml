@@ -8,7 +8,7 @@
     <!-- 标题栏 -->
     <view class="sheet-header">
       <text class="sheet-title">{{title}}</text>
-      <view class="sheet-cancel" bindtap="onCancel">取消</view>
+      <view class="sheet-action" bindtap="onSave">{{mode === 'edit' ? '保存' : '添加'}}</view>
     </view>
 
     <!-- 分割线 -->

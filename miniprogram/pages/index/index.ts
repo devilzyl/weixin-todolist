@@ -248,5 +248,15 @@ Component({
     onSheetClose() {
       this.setData({ showSheet: false })
     },
+
+    /**
+     * 表单保存（从底部面板标题栏触发）
+     */
+    onFormSave() {
+      const taskForm = this.selectComponent('#taskForm') as any
+      if (taskForm && taskForm.onSave) {
+        taskForm.onSave()
+      }
+    },
   },
 })

@@ -60,7 +60,4 @@
       </view>
     </view>
   </view>
-
-  <!-- 保存按钮 -->
-  <button class="save-btn" bindtap="onSave">{{todo ? '保存修改' : '添加任务'}}</button>
 </view>
