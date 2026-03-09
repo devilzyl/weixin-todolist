@@ -255,7 +255,57 @@ Component({
     onFormSave() {
       const taskForm = this.selectComponent('#taskForm') as any
       if (taskForm && taskForm.onSave) {
+        // 直接调用 taskForm 的 onSave，它会触发 save 事件
         taskForm.onSave()
+      }
+    },
+
+    /**
+     * 保存任务（从表单组件触发）
+     */
+    onSaveTask(e: WechatMiniprogram.CustomEvent) {
+      if (this.data.isBusy) return
+
+      this.setData({ isBusy: true })
+
+      const { title, content, priority, category } = e.detail as {
+        title: string
+        content: string
+        priority: TodoPriority
+        category: TodoCategory
+      }
+
+      try {
+        if (this.data.editingTodo) {
+          // 编辑模式
+          repository.update({
+            id: this.data.editingTodo.id,
+            title,
+            content,
+            priority,
+            category,
+          })
+        } else {
+          // 新增模式
+          repository.create({
+            title,
+            content,
+            priority,
+            category,
+          })
+        }
+
+        this.setData({ showSheet: false })
+        this.loadTodos()
+
+        wx.showToast({
+          title: this.data.editingTodo ? '已更新' : '已添加',
+          icon: 'success',
+        })
+      } catch (error) {
+        wx.showToast({ title: '保存失败', icon: 'none' })
+      } finally {
+        setTimeout(() => this.setData({ isBusy: false }), 300)
       }
     },
   },

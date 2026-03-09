@@ -84,6 +84,6 @@
     bind:close="onSheetClose"
     bind:save="onFormSave"
   >
-    <task-form id="taskForm" todo="{{editingTodo}}" theme="{{theme}}" />
+    <task-form id="taskForm" todo="{{editingTodo}}" theme="{{theme}}" bind:save="onSaveTask" />
   </bottom-sheet>
 </view>
