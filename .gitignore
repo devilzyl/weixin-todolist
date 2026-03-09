@@ -28,17 +28,18 @@ dist/
 build/
 
 # é¡¹ç›®æ–‡æ¡£ï¼ˆplan å’Œ AI ç›¸å…³ï¼‰
+CLAUDE.md
 plan.md
 UI-REFACTOR-SUMMARY.md
 TESTING.md
 *-plan.md
 *-SUMMARY.md
 
-# Agent ÓëÎÄµµÄ¿Â¼£¨²»ÉÏ´« GitHub£©
+# Agent ï¿½ï¿½ï¿½Äµï¿½Ä¿Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ GitHubï¿½ï¿½
 .agents/
 docs/
 
-# miniprogram-automator ±¾µØÅäÖÃ
+# miniprogram-automator ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 minitest/
 
 # æµ‹è¯•æ–‡ä»¶å¤¹ï¼ˆæœ¬åœ°æµ‹è¯•ä½¿ç”¨ï¼Œä¸ä¸Šä¼ äº‘ç«¯ï¼‰
