@@ -60,7 +60,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 这是一个**微信小程序 TodoList** 项目，使用 TypeScript 和 glass-easel 组件框架开发。
 
-**AppID:** wx1dc949ebb148e062
+**AppID:**
 
 ## Development Environment
 
